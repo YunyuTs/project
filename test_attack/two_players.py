@@ -1,7 +1,7 @@
 import pygame
 import math
 import random
-from player import player, check_touch
+from player import player
 from module import load_music
 
 pygame.init()
@@ -16,7 +16,7 @@ pink = (244, 224, 244)
 def main():
 
     #background music
-    song1 = 'src/sound/background.ogg'
+    song1 = 'src/sound/state0.wav'
     load_music(song1)
 
     #attack music
@@ -124,18 +124,19 @@ def main():
 
         #--------------------------------------------------
 
-        #玩家碰撞
-        if check_touch(P1, P2, player_size):
-            if t_flag == 0:
-                attack_sound.play()
-                dx, dy = check_touch(P1, P2, player_size)
-                t_flag = 1
-        else:
-            t_flag = 0
         
-        if t_flag == 1:
-            P1.touch(dx, dy)
-            P2.touch(dx, dy)
+        # #玩家碰撞
+        # if check_touch(P1, P2, player_size):
+        #     if t_flag == 0:
+        #         attack_sound.play()
+        #         dx, dy = check_touch(P1, P2, player_size)
+        #         t_flag = 1
+        # else:
+        #     t_flag = 0
+        
+        # if t_flag == 1:
+        #     P1.touch(dx, dy)
+        #     P2.touch(dx, dy)
 
         #玩家速度控制
         P1.setspeed()

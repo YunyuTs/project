@@ -124,27 +124,27 @@ class player():
     
     #--------------------------------------------------------------
 
-    def settouch(self): #碰撞初始設定
-        self.touch_time = 100
-        if self.state == 1: #防禦方
-            self.life -= 1
-            self.touch_speed = tmin_speed
-        else: #攻擊方
-            self.touch_speed = tmax_speed
+    # def settouch(self): #碰撞初始設定
+    #     self.touch_time = 100
+    #     if self.state == 1: #防禦方
+    #         self.life -= 1
+    #         self.touch_speed = tmin_speed
+    #     else: #攻擊方
+    #         self.touch_speed = tmax_speed
     
     #--------------------------------------------------------------
 
-    def touch(self, dx, dy): #推動速度:
-        if self.touch_time > 0 and self.touch_speed > 0:
-            if self.state == 0: #攻擊方
-                self.x += self.touch_speed * math.sin(math.radians(math.atan2(dx, dy)))
-                self.y += self.touch_speed * math.cos(math.radians(math.atan2(dx, dy)))
-                self.touch_speed = tmax_speed * math.sin(100 - self.touch_time / 100)
-            else: #防禦方
-                self.x -= self.touch_speed * math.sin(math.radians(math.atan2(dx, dy)))
-                self.y -= self.touch_speed * math.cos(math.radians(math.atan2(dx, dy)))
-                self.touch_speed = tmin_speed * math.sin(100 - self.touch_time / 100)
-            self.touch_time -= 1
+    # def touch(self, dx, dy): #推動速度:
+    #     if self.touch_time > 0 and self.touch_speed > 0:
+    #         if self.state == 0: #攻擊方
+    #             self.x += self.touch_speed * math.sin(math.radians(math.atan2(dx, dy)))
+    #             self.y += self.touch_speed * math.cos(math.radians(math.atan2(dx, dy)))
+    #             self.touch_speed = tmax_speed * math.sin(100 - self.touch_time / 100)
+    #         else: #防禦方
+    #             self.x -= self.touch_speed * math.sin(math.radians(math.atan2(dx, dy)))
+    #             self.y -= self.touch_speed * math.cos(math.radians(math.atan2(dx, dy)))
+    #             self.touch_speed = tmin_speed * math.sin(100 - self.touch_time / 100)
+    #         self.touch_time -= 1
     
     #--------------------------------------------------------------
 
@@ -193,12 +193,12 @@ class player():
 #--------------------------------------------------------------
         
 
-def check_touch(p1, p2, player_size): #碰撞偵測
-    if abs(p1.x - p2.x) < player_size and abs(p1.y - p2.y) < player_size:
-        p1.settouch()
-        p2.settouch()
-        dx = p1.x - p2.x
-        dy = p1.y - p2.y
-        return (dx, dy)
-    else:
-        return False
+# def check_touch(p1, p2, player_size): #碰撞偵測
+#     if abs(p1.x - p2.x) < player_size and abs(p1.y - p2.y) < player_size:
+#         p1.settouch()
+#         p2.settouch()
+#         dx = p1.x - p2.x
+#         dy = p1.y - p2.y
+#         return (dx, dy)
+#     else:
+#         return False
