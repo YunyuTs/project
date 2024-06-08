@@ -110,14 +110,16 @@ def main():
 
         if key[pygame.K_v]: #"v":衝刺
             if flag[0] == 0:
-                P1.setdrift()
+                if P1.sprint_time <= 0:
+                    P1.setdrift()
                 flag[0] = 1
         else:
             flag[0] = 0
         
         if key[pygame.K_COMMA]: #",":衝刺
             if flag[1] == 0:
-                P2.setdrift()
+                if P2.sprint_time <= 0:
+                    P2.setdrift()
                 flag[1] = 1
         else:
             flag[1] = 0

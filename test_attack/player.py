@@ -53,6 +53,9 @@ ang_speed = 5
 tmax_speed = 5
 tmin_speed = 2
 
+#衝刺延遲時間
+sprint_time = 100
+
 #玩家基本屬性
 class player():
     def __init__(
@@ -94,15 +97,16 @@ class player():
 
     def setspeed(self): #速度控制
         if self.sprint_time > 0 and self.speed > min_speed + 1: #衝刺速度
-            self.speed = max_speed + (max_speed - min_speed) * math.sin(100 - self.sprint_time / 10)
+            self.speed = max_speed + (max_speed - min_speed) * math.sin(sprint_time - self.sprint_time / 10)
             self.sprint_time -= 1
         else: #基本速度
             self.speed = min_speed
+            self.sprint_time = 0
 
     #--------------------------------------------------------------
 
     def setdrift(self): #衝刺遺落物件
-        self.sprint_time = 100
+        self.sprint_time = sprint_time
         self.speed = max_speed
         for i in range(3):
             o_speed = random.randint(1, 2)
