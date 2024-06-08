@@ -15,5 +15,6 @@ def blitRotate(surf, image, origin, pivot, angle):
 #background music
 def load_music(song1):
     """Load the music"""
+    pygame.mixer.music.set_volume(0.3)
     pygame.mixer.music.load(song1)
     pygame.mixer.music.play(-1)
