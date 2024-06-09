@@ -49,12 +49,9 @@ min_speed = 3
 #角速度
 ang_speed = 5
 
-#設定碰撞最大速度
-tmax_speed = 5
-tmin_speed = 2
-
 #衝刺延遲時間
 sprint_time = 100
+
 
 #玩家基本屬性
 class player():
@@ -63,7 +60,6 @@ class player():
             speed = 3, ang = 0, #速度, 角度
             life = 8, state = 0, sprint_time = 0, #生命值, 狀態(攻擊, 防禦), 衝刺時間
             drift_parts = [0, 0, 0], #衝刺物件
-            touch_speed = 0, touch_time = 0 #碰撞時間
             ):
         self.x = x
         self.y = y
@@ -73,8 +69,6 @@ class player():
         self.state = state
         self.sprint_time = sprint_time
         self.drift_parts = drift_parts
-        self.touch_speed = touch_speed
-        self.touch_time = touch_time
     
     #--------------------------------------------------------------
 
@@ -128,32 +122,15 @@ class player():
     
     #--------------------------------------------------------------
 
-    # def settouch(self): #碰撞初始設定
-    #     self.touch_time = 100
-    #     if self.state == 1: #防禦方
-    #         self.life -= 1
-    #         self.touch_speed = tmin_speed
-    #     else: #攻擊方
-    #         self.touch_speed = tmax_speed
-    
-    #--------------------------------------------------------------
-
-    # def touch(self, dx, dy): #推動速度:
-    #     if self.touch_time > 0 and self.touch_speed > 0:
-    #         if self.state == 0: #攻擊方
-    #             self.x += self.touch_speed * math.sin(math.radians(math.atan2(dx, dy)))
-    #             self.y += self.touch_speed * math.cos(math.radians(math.atan2(dx, dy)))
-    #             self.touch_speed = tmax_speed * math.sin(100 - self.touch_time / 100)
-    #         else: #防禦方
-    #             self.x -= self.touch_speed * math.sin(math.radians(math.atan2(dx, dy)))
-    #             self.y -= self.touch_speed * math.cos(math.radians(math.atan2(dx, dy)))
-    #             self.touch_speed = tmin_speed * math.sin(100 - self.touch_time / 100)
-    #         self.touch_time -= 1
+    def settouch(self): #碰撞初始設定
+        if self.state == 1: #防禦方
+            self.life -= 1
     
     #--------------------------------------------------------------
 
     def draw(self, screen, img): #畫出玩家
         blitRotate(screen, img, self.getpos(), (img.get_width() / 2, img.get_height() / 2), self.ang)
+        
 
     #--------------------------------------------------------------
     
@@ -196,13 +173,4 @@ class player():
 
 #--------------------------------------------------------------
         
-
-# def check_touch(p1, p2, player_size): #碰撞偵測
-#     if abs(p1.x - p2.x) < player_size and abs(p1.y - p2.y) < player_size:
-#         p1.settouch()
-#         p2.settouch()
-#         dx = p1.x - p2.x
-#         dy = p1.y - p2.y
-#         return (dx, dy)
-#     else:
-#         return False
+    

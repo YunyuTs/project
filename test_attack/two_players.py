@@ -1,7 +1,7 @@
 import pygame
 import math
 import random
-from player import player
+from player import *
 from module import load_music
 
 pygame.init()
@@ -10,6 +10,7 @@ pygame.init()
 white = (255,255,255)
 black = (0, 0, 0)
 pink = (244, 224, 244)
+
 
 
 #主程式
@@ -79,6 +80,11 @@ def main():
     flag = [0, 0] #0:未按下, 1:按下
     t_flag = 0 #0:未碰撞, 1:碰撞
     dx, dy = 0, 0
+    
+    #字體
+    font = pygame.font.SysFont("microsoftjhengheimicrosoftjhengheiui", 30)
+    p1_text = font.render("P1", True, (255, 255, 255))
+    p2_text = font.render("P2", True, (255, 255, 255))
 
     #--------------------------------------------------------------
 
@@ -126,19 +132,25 @@ def main():
 
         #--------------------------------------------------
 
+        #碰撞偵測s
+        if abs(P1.x - P2.x) < player_size and abs(P1.y - P2.y) < player_size:
+            if t_flag == 0:
+                t_flag = 1
+                attack_sound.play()
+                P1.settouch()
+                P2.settouch()
+                dx = P1.x - P2.x
+                dy = P1.y - P2.y
+        else:
+            t_flag = 0
         
-        # #玩家碰撞
-        # if check_touch(P1, P2, player_size):
-        #     if t_flag == 0:
-        #         attack_sound.play()
-        #         dx, dy = check_touch(P1, P2, player_size)
-        #         t_flag = 1
-        # else:
-        #     t_flag = 0
-        
-        # if t_flag == 1:
-        #     P1.touch(dx, dy)
-        #     P2.touch(dx, dy)
+        if t_flag == 1:
+            if abs(dx) > abs(dy):
+                P1.x += dx / abs(dx) * 2
+                P2.x -= dx / abs(dx) * 2
+            else:
+                P1.y += dy / abs(dy) * 2
+                P2.y -= dy / abs(dy) * 2 
 
         #玩家速度控制
         P1.setspeed()
@@ -153,6 +165,8 @@ def main():
         P2.drift(screen, img_sp[1 - STATE])
         P1.draw(screen, img_player1[STATE])
         P2.draw(screen, img_player2[1 - STATE])
+        screen.blit(p1_text, (P1.x - 10, P1.y - 50))
+        screen.blit(p2_text, (P2.x - 10, P2.y - 50))
 
         #--------------------------------------------------
 
@@ -163,7 +177,7 @@ def main():
             P1.state = STATE
             P2.state = 1 - STATE
 
-
+        pygame.mouse.set_visible(0)
         ms_x, ms_y = pygame.mouse.get_pos()
         pygame.draw.circle(screen, pink, (ms_x, ms_y), 5)
         

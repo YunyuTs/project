@@ -59,6 +59,19 @@ def main():
 
     run = True
     while run:
+
+        if time % a == 0 or pygame.mixer.Channel(0).get_busy() == True:
+            print(pygame.mixer.Channel(0).get_busy())
+            if flag == 0:
+                #pygame.mixer.music.stop()
+                time = 0
+                change.play()
+                x = 1 - x
+                pygame.mixer.music.load(song[x])
+                pygame.mixer.music.play()
+                flag = 1
+        else:
+            flag = 0
         
         #播放速度控制
         clock.tick(fps)
@@ -73,18 +86,6 @@ def main():
             elif event.type == pygame.KEYDOWN : #鍵盤按下事件
                 if event.key == pygame.K_ESCAPE:
                     run = False
-
-        if time % a == 0:
-            if flag == 0:
-                #pygame.mixer.music.stop()
-                if time != 0:
-                    change.play()
-                x = 1 - x
-                pygame.mixer.music.load(song[x])
-                pygame.mixer.music.play()
-                flag = 1
-        else:
-            flag = 0
 
         key = pygame.key.get_pressed()
         if key[pygame.K_SPACE]:
