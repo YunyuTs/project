@@ -1,6 +1,7 @@
 import pygame
 import math
 from player import player
+from pause_game import pause_game
 
 #初始化
 pygame.init()
@@ -30,15 +31,16 @@ fps = 80
 def game_play():
 
     #---------背景設定---------
-    player_size = 50 #玩家大小
-    sp_size = 32 #衝刺物件大小
+    player_size = 40 #玩家大小
+    sp_size = 30 #衝刺物件大小
     heart_size = 40 #生命值圖片大小
     time_width, time_height = 700, 10 #時間軸大小
     time_y = 30 #時間軸位置
     bg_width, bg_height = 100, 20 #場地大小
-    thickness = 30 #邊界寬度
+    thickness = 40 #邊界寬度
     side_color = [(93, 29, 104), (255, 226, 251)] #邊界顏色
     tweak = 10 #調整位置
+    font = pygame.font.SysFont("microsoftjhengheimicrosoftjhengheiui", int(player_size * 3 / 5)) #字體
     #--------------------------------
 
 
@@ -48,8 +50,9 @@ def game_play():
     state_flag = 0 #狀態轉換
     flag = [0, 0] #0:未按下 1:按下
     song_flag = 0 #轉換音樂
-    t_flage = 0 #0:未碰撞 1:碰撞
+    t_flag = 0 #0:未碰撞 1:碰撞
     invince_time = 0 #無敵時間
+    invince_time_max = 150 #無敵時間上限
     #--------------------------------
 
 
@@ -84,9 +87,6 @@ def game_play():
     #玩家基本設定
     P1 = player(bg_width + thickness + player_size, screen_height / 2 + time_y)
     P2 = player(screen_width - bg_width - thickness - player_size, screen_height / 2 + time_y, 3, 0, 8, 1)
-
-    #字體
-    font = pygame.font.SysFont("microsoftjhengheimicrosoftjhengheiui", 30)
     #--------------------------------
 
 
@@ -103,8 +103,8 @@ def game_play():
     change.set_volume(change_volume)
 
     #音效
-    attack = pygame.mixer.Sound('src/sound/attack.ogg')
-    attack_volume = volume / 3
+    attack = pygame.mixer.Sound('src/sound/attack.wav')
+    attack_volume = 0.3
     attack.set_volume(attack_volume)
     #--------------------------------
 
@@ -175,7 +175,7 @@ def game_play():
             if t_flag == 0:
                 t_flag = 1
                 attack.play()
-                invince_time = 200
+                invince_time = invince_time_max
                 if state == 0:
                     P2.life -= 1
                     if P2.life <= 0:
@@ -208,19 +208,19 @@ def game_play():
             P1.x = screen_width - bg_width - player_size / 2
         elif P1.x + player_size / 2 > screen_width - bg_width:
             P1.x = bg_width + player_size / 2
-        if P1.y - player_size / 2 < bg_height:
+        if P1.y - player_size / 2 < bg_height + time_y:
             P1.y = screen_height - bg_height - player_size / 2
         elif P1.y + player_size / 2 > screen_height - bg_height:
-            P1.y = bg_height + player_size / 2
+            P1.y = bg_height + time_y + player_size / 2
         #P2碰撞邊界
         if P2.x - player_size / 2 < bg_width:
             P2.x = screen_width - bg_width - player_size / 2
         elif P2.x + player_size / 2 > screen_width - bg_width:
             P2.x = bg_width + player_size / 2
-        if P2.y - player_size / 2 < bg_height:
+        if P2.y - player_size / 2 < bg_height + time_y:
             P2.y = screen_height - bg_height - player_size / 2
         elif P2.y + player_size / 2 > screen_height - bg_height:
-            P2.y = bg_height + player_size / 2
+            P2.y = bg_height + time_y + player_size / 2
 
 
         #繪製玩家
@@ -265,10 +265,18 @@ def game_play():
             screen.blit(p2_text, (P2.x - (player_size / 5), P2.y - player_size))
         #--------------------------------
 
-        #更新時間
-        time += 1
+        #------繪製時間軸-------
         pygame.draw.rect(screen, bg_color[1 - state], [(screen_width - time_width) / 2, time_y, time_width * time / len, time_height], 0)
         pygame.draw.rect(screen, bg_color[1 - state], [(screen_width - time_width) / 2, time_y, time_width, time_height], int(time_height / 5))
+        #--------------------------------
+
+
+        #更新時間
+        if key[pygame.K_SPACE]:
+            pygame.mixer.music.pause()
+            pause_game(screen, volume, change_volume, attack_volume)
+            pygame.mixer.music.unpause()
+        time += 1
         #----------------------
 
 if __name__ == '__main__':
