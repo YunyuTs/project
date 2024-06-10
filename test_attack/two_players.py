@@ -77,9 +77,10 @@ def main():
     #狀態
     time = 0 #時間
     STATE = 0 #0:攻擊, 1:防禦
+    STATE_flag = 0 #0:未切換, 1:切換
     flag = [0, 0] #0:未按下, 1:按下
     t_flag = 0 #0:未碰撞, 1:碰撞
-    dx, dy = 0, 0
+    invince_time = 0 #無敵時間
     
     #字體
     font = pygame.font.SysFont("microsoftjhengheimicrosoftjhengheiui", 30)
@@ -133,24 +134,24 @@ def main():
         #--------------------------------------------------
 
         #碰撞偵測s
-        if abs(P1.x - P2.x) < player_size and abs(P1.y - P2.y) < player_size:
+        if abs(P1.x - P2.x) < player_size and abs(P1.y - P2.y) < player_size and invince_time <= 0:
             if t_flag == 0:
                 t_flag = 1
                 attack_sound.play()
-                P1.settouch()
-                P2.settouch()
-                dx = P1.x - P2.x
-                dy = P1.y - P2.y
+                invince_time = 200
+                if STATE == 0:
+                    P2.life -= 1
+                else:
+                    P1.life -= 1
         else:
             t_flag = 0
-        
-        if t_flag == 1:
-            if abs(dx) > abs(dy):
-                P1.x += dx / abs(dx) * 2
-                P2.x -= dx / abs(dx) * 2
-            else:
-                P1.y += dy / abs(dy) * 2
-                P2.y -= dy / abs(dy) * 2 
+
+        #無敵時間
+        if invince_time > 0:
+            invince_time -= 1
+        if STATE != STATE_flag:
+            invince_time = 0
+            STATE_flag = STATE
 
         #玩家速度控制
         P1.setspeed()
@@ -161,13 +162,21 @@ def main():
         P2.turn_move(key, pygame.K_LEFT, pygame.K_UP, pygame.K_DOWN, pygame.K_RIGHT)
 
         #繪製玩家
-        P1.drift(screen, img_sp[STATE])
-        P2.drift(screen, img_sp[1 - STATE])
-        P1.draw(screen, img_player1[STATE])
-        P2.draw(screen, img_player2[1 - STATE])
-        screen.blit(p1_text, (P1.x - 10, P1.y - 50))
-        screen.blit(p2_text, (P2.x - 10, P2.y - 50))
-
+        if STATE == 0:
+            P2.drift(screen, img_sp[1 - STATE])
+            P2.draw(screen, img_player2[1 - STATE], invince_time)
+            P1.drift(screen, img_sp[STATE])
+            P1.draw(screen, img_player1[STATE], invince_time)
+            screen.blit(p2_text, (P2.x - (player_size / 5), P2.y - player_size))
+            screen.blit(p1_text, (P1.x - (player_size / 5), P1.y - player_size))
+        else:
+            P1.drift(screen, img_sp[STATE])
+            P1.draw(screen, img_player1[STATE], invince_time)
+            P2.drift(screen, img_sp[1 - STATE])
+            P2.draw(screen, img_player2[1 - STATE], invince_time)
+            screen.blit(p1_text, (P1.x - (player_size / 5), P1.y - player_size))
+            screen.blit(p2_text, (P2.x - (player_size / 5), P2.y - player_size))
+                
         #--------------------------------------------------
 
         #狀態切換

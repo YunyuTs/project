@@ -3,13 +3,19 @@ import math
 import random
 from module import blitRotate #turn from center
 
-'''
-pygame.init()
-font = pygame.font.SysFont("microsoftjhengheimicrosoftjhengheiui", 30)
-P1Text = font.render("P1", True, (255, 255, 255))
-P2Text = font.render("P2", True, (255, 255, 255))
-'''
+#設定玩家最大最小速度
+max_speed = 12
+min_speed = 3
 
+#角速度
+ang_speed = 5
+
+#衝刺延遲時間
+sprint_time = 100 #衝刺延遲時間
+sprint_duration = 80 #衝刺持續時間
+drift_duration = 10 #衝刺遺落物件持續時間
+
+#--------------------------------------------------------------
 
 #衝刺物件
 class sprint():
@@ -33,25 +39,13 @@ class sprint():
         self.direction -= 2
 
     def setsp(self): #減速度
-        self.speed = self.o_speed * math.cos((100 - self.time) / 80)
+        self.speed = self.o_speed * math.cos((sprint_time - self.time) / sprint_duration)
     
     def draw(self, screen, img): #畫出物件
         if self.speed > 0 and self.time > 0:
             blitRotate(screen, img, (self.x, self.y), (img.get_width() / 2, img.get_height() / 2), self.direction)
 
 #--------------------------------------------------------------
-
-
-#設定玩家最大最小速度
-max_speed = 12
-min_speed = 3
-
-#角速度
-ang_speed = 5
-
-#衝刺延遲時間
-sprint_time = 100
-
 
 #玩家基本屬性
 class player():
@@ -91,7 +85,7 @@ class player():
 
     def setspeed(self): #速度控制
         if self.sprint_time > 0 and self.speed > min_speed + 1: #衝刺速度
-            self.speed = max_speed + (max_speed - min_speed) * math.sin(sprint_time - self.sprint_time / 10)
+            self.speed = max_speed + (max_speed - min_speed) * math.sin(sprint_time - self.sprint_time / drift_duration)
             self.sprint_time -= 1
         else: #基本速度
             self.speed = min_speed
@@ -122,14 +116,11 @@ class player():
     
     #--------------------------------------------------------------
 
-    def settouch(self): #碰撞初始設定
-        if self.state == 1: #防禦方
-            self.life -= 1
-    
-    #--------------------------------------------------------------
-
-    def draw(self, screen, img): #畫出玩家
-        blitRotate(screen, img, self.getpos(), (img.get_width() / 2, img.get_height() / 2), self.ang)
+    def draw(self, screen, img, invince_time): #畫出玩家
+        if self.state == 0:
+            blitRotate(screen, img, self.getpos(), (img.get_width() / 2, img.get_height() / 2), self.ang)
+        if (invince_time % 50 < 25 or invince_time <= 0):
+            blitRotate(screen, img, self.getpos(), (img.get_width() / 2, img.get_height() / 2), self.ang)
         
 
     #--------------------------------------------------------------
@@ -172,5 +163,4 @@ class player():
             self.ang -= 360
 
 #--------------------------------------------------------------
-        
-    
+ 
