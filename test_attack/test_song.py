@@ -21,10 +21,10 @@ black = (0, 0, 0)
 red = (255, 0, 0)
 
 width = 700
-height = 70
+height = 10
 
 klick_width = 50
-klick_height = 100
+klick_height = 20
 
 def main():
 
@@ -100,13 +100,13 @@ def main():
         
 
         pygame.draw.rect(screen, white, [(screen_width - width) / 2, 50, width * (time % (a + 1)) / a, height], 0)
-        pygame.draw.rect(screen, red, [(screen_width - width) / 2, 50, width, height], 10)
+        pygame.draw.rect(screen, red, [(screen_width - width) / 2, 50, width, height], 2)
             
         pygame.draw.rect(screen, white, [(screen_width - width) / 2, 150, width * volume, height], 0)
-        pygame.draw.rect(screen, red, [(screen_width - width) / 2, 150, width, height], 10)
+        pygame.draw.rect(screen, red, [(screen_width - width) / 2, 150, width, height], 2)
         
         pygame.draw.rect(screen, white, [(screen_width - width - klick_width) / 2 + width * volume, 150  + (height - klick_height) / 2, klick_width, klick_height], 0)
-        pygame.draw.rect(screen, red, [(screen_width - width - klick_width) / 2 + width * volume, 150  + (height - klick_height) / 2, klick_width, klick_height], 10)
+        pygame.draw.rect(screen, red, [(screen_width - width - klick_width) / 2 + width * volume, 150  + (height - klick_height) / 2, klick_width, klick_height], 2)
            
         if pygame.mouse.get_pressed()[0]:
             m_x, m_y = pygame.mouse.get_pos()

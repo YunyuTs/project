@@ -7,7 +7,7 @@ Created on Sat May 18 14:53:18 2024
 
 import pygame
 import math
-import random
+#import random
 #from test_player import player
 
 pygame.init()
@@ -27,7 +27,7 @@ white = (255,255,255)
 black = (0, 0, 0)
 
 #background color
-back = [(244, 224, 244), (70, 10, 80)]
+back = [(230, 210, 230), (70, 10, 80)]
 
 #設定畫面大小
 screen_width = 1280

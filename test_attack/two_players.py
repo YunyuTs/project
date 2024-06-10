@@ -1,6 +1,6 @@
 import pygame
 import math
-import random
+#import random
 from player import *
 from module import load_music
 
