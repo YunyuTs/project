@@ -27,6 +27,9 @@ pygame.display.set_caption('game')
 clock = pygame.time.Clock()
 fps = 80
 
+#重複
+repeat = False
+
 #主程式
 def game_play():
 
@@ -41,6 +44,7 @@ def game_play():
     side_color = [(93, 29, 104), (255, 226, 251)] #邊界顏色
     tweak = 10 #調整位置
     font = pygame.font.SysFont("microsoftjhengheimicrosoftjhengheiui", int(player_size * 3 / 5)) #字體
+    min_speed = 3 #玩家最小速度
     #--------------------------------
 
 
@@ -85,8 +89,10 @@ def game_play():
         Life.append(pygame.transform.scale(img, (heart_size, heart_size)))
 
     #玩家基本設定
-    P1 = player(bg_width + thickness + player_size, screen_height / 2 + time_y)
-    P2 = player(screen_width - bg_width - thickness - player_size, screen_height / 2 + time_y, 3, 0, 8, 1)
+    P1 = player(bg_width + thickness + player_size, screen_height / 2 + time_y,
+                min_speed, 0, 8, 0, 0, [0, 0, 0])
+    P2 = player(screen_width - bg_width - thickness - player_size, screen_height / 2 + time_y,
+                min_speed, 0, 8, 1, 0, [0, 0, 0])
     #--------------------------------
 
 
@@ -266,18 +272,38 @@ def game_play():
         #--------------------------------
 
         #------繪製時間軸-------
-        pygame.draw.rect(screen, bg_color[1 - state], [(screen_width - time_width) / 2, time_y, time_width * time / len, time_height], 0)
-        pygame.draw.rect(screen, bg_color[1 - state], [(screen_width - time_width) / 2, time_y, time_width, time_height], int(time_height / 5))
+        if state == 0:
+            pygame.draw.rect(screen, bg_color[1 - state], [(screen_width - time_width) / 2, time_y, time_width * time / len, time_height], 0)
+            pygame.draw.rect(screen, bg_color[1 - state], [(screen_width - time_width) / 2, time_y, time_width, time_height], int(time_height / 5))
+            pygame.draw.circle(screen, bg_color[state], ((screen_width - time_width) / 2 + time_width * time / len, time_y + time_height / 2), time_height)
+            pygame.draw.circle(screen, bg_color[1 - state], ((screen_width - time_width) / 2 + time_width * time / len, time_y + time_height / 2), time_height, int(time_height / 5))
+        else:
+            pygame.draw.rect(screen, bg_color[1 - state], [(screen_width - time_width) / 2, time_y, time_width * (1 - time / len), time_height], 0)
+            pygame.draw.rect(screen, bg_color[1 - state], [(screen_width - time_width) / 2, time_y, time_width, time_height], int(time_height / 5))
+            pygame.draw.circle(screen, bg_color[state], ((screen_width - time_width) / 2 + time_width * (1 - time / len), time_y + time_height / 2), time_height)
+            pygame.draw.circle(screen, bg_color[1 - state], ((screen_width - time_width) / 2 + time_width * (1 - time / len), time_y + time_height / 2), time_height, int(time_height / 5))
         #--------------------------------
 
 
         #更新時間
+        time += 1
         if key[pygame.K_SPACE]:
             pygame.mixer.music.pause()
-            pause_game(screen, volume, change_volume, attack_volume)
-            pygame.mixer.music.unpause()
-        time += 1
+            repeat, volume, attack_volume = pause_game(screen, volume, attack_volume)
+            if repeat:
+                pygame.mixer.stop()
+                return repeat
+            else:
+                pygame.mixer.music.set_volume(volume)
+                change.set_volume(volume / 3)
+                attack.set_volume(attack_volume)
+                pygame.mixer.music.unpause()
+                time -= 1
         #----------------------
+    return 0
 
 if __name__ == '__main__':
-    game_play()	
+    repeat = True
+    while repeat:
+        repeat = False
+        repeat = game_play()	
