@@ -303,7 +303,7 @@ def game_play():
                 change.set_volume(volume / 3)
                 attack.set_volume(attack_volume)
                 pygame.mixer.music.unpause()
-                if pause_times < fps: #避免延遲
+                if pause_times < 50: #避免延遲
                     time -= 1
         #----------------------
     return 0

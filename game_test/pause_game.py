@@ -8,6 +8,7 @@ white = (255,255,255)
 black = (0, 0, 0)
 gray = (128, 128, 128)
 
+
 #設定畫面大小   
 screen_width = 1280
 screen_height = 720
@@ -15,6 +16,7 @@ screen_size = (screen_width, screen_height)
 clock = pygame.time.Clock()
 fps = 80
 window_width = 800
+
 
 #設定顏色差異、按鈕寬度、按鈕間距
 color_differece = 30
@@ -33,6 +35,7 @@ font = pygame.font.SysFont("microsoftjhengheimicrosoftjhengheiui", text_size) #�
 volume_text = font.render('Volume', True, gray) #設定音量文字
 attack_volume_text = font.render('Attack Volume', True, gray) #設定攻擊音量文字
 
+
 #讀取圖片
 pause_img = cv2.imread('src/images/pause.png')
 pause_B, pause_G, pause_R = cv2.split(pause_img)
@@ -47,11 +50,13 @@ for i in range(2):
     img_pause.append(cv2.merge([pause_B - color_differece * i, pause_B - color_differece * i, pause_B - color_differece * i]))
     img_return.append(cv2.merge([return_B - color_differece * i, return_B - color_differece * i, return_B - color_differece * i]))
     img_home.append(cv2.merge([home_B - color_differece * i, home_B - color_differece * i, home_B - color_differece * i]))
+background_color = [(0, 0, 0), (256 - color_differece, 256 - color_differece, 256 - color_differece)]
 
 #設定變數
 p = 0
 r = 0
 h = 0
+
 
 def pause_game(screen, volume, attack_volume, state):
     window = pygame.Surface((window_width, screen_height))
@@ -59,7 +64,7 @@ def pause_game(screen, volume, attack_volume, state):
     if state == 0:
         window.set_alpha(128)
     else:
-        window.set_alpha(180)
+        window.set_alpha(200)
     screen.blit(window, ((screen_width - window_width) // 2, 0))
     run = True
     while run:
@@ -117,25 +122,25 @@ def pause_game(screen, volume, attack_volume, state):
         #畫出按鈕
         pause_surface = pygame.surfarray.make_surface(cv2.rotate(img_pause[p], cv2.ROTATE_90_CLOCKWISE))
         if p == 0:
-            pause_surface.set_colorkey((0, 0, 0))
+            pause_surface.set_colorkey(background_color[0])
         else:
-            pause_surface.set_colorkey((226, 226, 226))
+            pause_surface.set_colorkey(background_color[1])
         pause_surface = pygame.transform.scale(pause_surface, (button_width, button_width))
         screen.blit(pause_surface, (screen_width // 2 - button_distance - button_width // 2, button_y))
         
         return_surface = pygame.surfarray.make_surface(cv2.flip(img_return[r], 1))
         if r == 0:
-            return_surface.set_colorkey((0, 0, 0))
+            return_surface.set_colorkey(background_color[0])
         else:
-            return_surface.set_colorkey((226, 226, 226))
+            return_surface.set_colorkey(background_color[1])
         return_surface = pygame.transform.scale(return_surface, (button_width, button_width))
         screen.blit(return_surface, (screen_width // 2 - button_width // 2, button_y))
 
         home_surface = pygame.surfarray.make_surface(cv2.rotate(img_home[h], cv2.ROTATE_90_COUNTERCLOCKWISE))
         if h == 0:
-            home_surface.set_colorkey((0, 0, 0))
+            home_surface.set_colorkey(background_color[0])
         else:
-            home_surface.set_colorkey((226, 226, 226))
+            home_surface.set_colorkey(background_color[1])
         home_surface = pygame.transform.scale(home_surface, (button_width, button_width))
         screen.blit(home_surface, (screen_width // 2 + button_distance - button_width // 2, button_y))
         #------------------------------------------------
