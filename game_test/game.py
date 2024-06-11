@@ -57,6 +57,7 @@ def game_play():
     t_flag = 0 #0:未碰撞 1:碰撞
     invince_time = 0 #無敵時間
     invince_time_max = 150 #無敵時間上限
+    pause_times = 0 #暫停次數
     #--------------------------------
 
 
@@ -134,6 +135,7 @@ def game_play():
                     pygame.mixer.music.load(song[state])
                     pygame.mixer.music.play()
                     song_flag = 1
+                    pause_times = 0
         #--------------------------------
 
         
@@ -289,7 +291,8 @@ def game_play():
         time += 1
         if key[pygame.K_SPACE]:
             pygame.mixer.music.pause()
-            repeat, volume, attack_volume = pause_game(screen, volume, attack_volume)
+            pause_times += 1
+            repeat, volume, attack_volume = pause_game(screen, volume, attack_volume, state)
             if repeat == 1:
                 pygame.mixer.stop()
                 return repeat
@@ -300,7 +303,8 @@ def game_play():
                 change.set_volume(volume / 3)
                 attack.set_volume(attack_volume)
                 pygame.mixer.music.unpause()
-                time -= 1
+                if pause_times < fps: #避免延遲
+                    time -= 1
         #----------------------
     return 0
 

@@ -14,6 +14,7 @@ screen_height = 720
 screen_size = (screen_width, screen_height)
 clock = pygame.time.Clock()
 fps = 80
+window_width = 800
 
 #設定顏色差異、按鈕寬度、按鈕間距
 color_differece = 30
@@ -52,11 +53,14 @@ p = 0
 r = 0
 h = 0
 
-def pause_game(screen, volume, attack_volume):
-    window = pygame.Surface(screen_size)
+def pause_game(screen, volume, attack_volume, state):
+    window = pygame.Surface((window_width, screen_height))
     window.fill((255, 255, 255))
-    window.set_alpha(128)
-    screen.blit(window, (0, 0))
+    if state == 0:
+        window.set_alpha(128)
+    else:
+        window.set_alpha(180)
+    screen.blit(window, ((screen_width - window_width) // 2, 0))
     run = True
     while run:
 
