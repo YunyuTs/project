@@ -28,7 +28,7 @@ clock = pygame.time.Clock()
 fps = 80
 
 #重複
-repeat = False
+repeat = 0
 
 #主程式
 def game_play():
@@ -290,8 +290,10 @@ def game_play():
         if key[pygame.K_SPACE]:
             pygame.mixer.music.pause()
             repeat, volume, attack_volume = pause_game(screen, volume, attack_volume)
-            if repeat:
+            if repeat == 1:
                 pygame.mixer.stop()
+                return repeat
+            elif repeat == 2:
                 return repeat
             else:
                 pygame.mixer.music.set_volume(volume)
@@ -303,7 +305,9 @@ def game_play():
     return 0
 
 if __name__ == '__main__':
-    repeat = True
+    repeat = 1
     while repeat:
-        repeat = False
-        repeat = game_play()	
+        repeat = 0
+        repeat = game_play()
+        if repeat == 2:
+            break
