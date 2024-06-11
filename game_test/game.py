@@ -185,12 +185,12 @@ def game_play():
                 if state == 0:
                     P2.life -= 1
                     if P2.life <= 0:
-                        print("P1 win")
+                        return 3
                         run = False
                 else:
                     P1.life -= 1
                     if P1.life <= 0:
-                        print("P2 win")
+                        return 4
                         run = False
         else:
             t_flag = 0
@@ -309,5 +309,9 @@ if __name__ == '__main__':
     while repeat:
         repeat = 0
         repeat = game_play()
-        if repeat == 2:
+        if repeat == 3:
+            print("P1 win")
+        elif repeat == 4:
+            print("P2 win")
+        if repeat > 1:
             break
