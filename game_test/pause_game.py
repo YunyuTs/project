@@ -1,5 +1,6 @@
 import pygame
 import cv2
+import time
 
 pygame.init()
 
@@ -59,6 +60,8 @@ h = 0
 
 
 def pause_game(screen, volume, attack_volume, state):
+
+    #設定透視視窗
     window = pygame.Surface((window_width, screen_height))
     window.fill((255, 255, 255))
     if state == 0:
@@ -66,6 +69,10 @@ def pause_game(screen, volume, attack_volume, state):
     else:
         window.set_alpha(200)
     screen.blit(window, ((screen_width - window_width) // 2, 0))
+    
+    debounce_time = 0.3 #按鍵去抖的時間間隔（以秒為單位）
+    last_key_press_time = {} #記錄按鍵最後按下的時間
+    
     run = True
     while run:
 
@@ -80,11 +87,21 @@ def pause_game(screen, volume, attack_volume, state):
             elif event.type == pygame.KEYDOWN :
                 if event.key == pygame.K_ESCAPE:
                     run = False
+                current_time = time.time()
+                key = event.key
+                # 檢查按鍵是否在去抖時間間隔內
+                if key in last_key_press_time:
+                    if current_time - last_key_press_time[key] < debounce_time:
+                        continue  # 如果在去抖時間內，跳過這個按鍵事件
+                
+                # 記錄按鍵按下的時間
+                last_key_press_time[key] = current_time
+
+                #處理按鍵事件
+                if key == pygame.K_SPACE:
+                    return 0, volume, attack_volume
         
-        #鍵盤事件
-        key = pygame.key.get_pressed()
-        if key[pygame.K_SPACE]:
-            return 0, volume, attack_volume
+        
         
         #滑鼠事件
         m_x, m_y = pygame.mouse.get_pos()
@@ -152,6 +169,7 @@ def pause_game(screen, volume, attack_volume, state):
         screen.blit(volume_text, volume_text_rect)
         pygame.draw.rect(screen, white, [(screen_width - volume_width) // 2, volume_y, volume_width, volume_height], 0)
         pygame.draw.rect(screen, gray, [(screen_width - volume_width) // 2, volume_y, volume_width * volume, volume_height], 0)
+        pygame.draw.circle(screen, gray, (int((screen_width - volume_width) // 2 + volume_width * volume), volume_y + volume_height // 2), volume_height // 2)
         pygame.draw.rect(screen, gray, [(screen_width - volume_width) // 2, volume_y, volume_width, volume_height], volume_height // 5)
         
         #畫出攻擊音量條
@@ -159,7 +177,8 @@ def pause_game(screen, volume, attack_volume, state):
         screen.blit(attack_volume_text, attack_volume_text_rect)
         pygame.draw.rect(screen, white, [(screen_width - attack_volume_width) // 2, attack_volume_y, attack_volume_width, attack_volume_height], 0)
         pygame.draw.rect(screen, gray, [(screen_width - attack_volume_width) // 2, attack_volume_y, attack_volume_width * attack_volume, attack_volume_height], 0)
+        pygame.draw.circle(screen, gray, (int((screen_width - attack_volume_width) // 2 + attack_volume_width * attack_volume), attack_volume_y + attack_volume_height // 2), attack_volume_height // 2)
         pygame.draw.rect(screen, gray, [(screen_width - attack_volume_width) // 2, attack_volume_y, attack_volume_width, attack_volume_height], attack_volume_height // 5)
         
-
+        
     return 0, volume, attack_volume

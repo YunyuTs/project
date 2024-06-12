@@ -1,5 +1,6 @@
 import pygame
 import math
+import time
 from player import player
 from pause_game import pause_game
 
@@ -49,7 +50,7 @@ def game_play():
 
 
     #---------狀態設定---------
-    time = 0 #時間
+    t = 0 #時間
     state = 1 #0:攻擊 1:防禦
     state_flag = 0 #狀態轉換
     flag = [0, 0] #0:未按下 1:按下
@@ -58,6 +59,8 @@ def game_play():
     invince_time = 0 #無敵時間
     invince_time_max = 150 #無敵時間上限
     pause_times = 0 #暫停次數
+    debounce_time = 0.3 #去抖時間
+    last_key_press_time = {} #最後按下時間
     #--------------------------------
 
 
@@ -120,14 +123,14 @@ def game_play():
     run = True
     while run:
         #-------音樂播放、狀態轉換-------
-        if time % 2 == 0:
+        if t % 2 == 0:
             if pygame.mixer.music.get_busy():
                 song_flag = 0
             else:
                 #print(pygame.mixer.Channel(0).get_busy())
                 if song_flag == 0:
                     #pygame.mixer.music.stop()
-                    time = 0
+                    t = 0
                     change.play()
                     state = 1 - state
                     P1.state = state
@@ -138,14 +141,6 @@ def game_play():
                     pause_times = 0
         #--------------------------------
 
-        
-        #---------基礎設定---------
-        #時間揁數
-        clock.tick(fps)
-        #更新畫面
-        pygame.display.flip()
-        screen.fill(bg_color[state])
-
         #event handler
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -153,7 +148,42 @@ def game_play():
             elif event.type == pygame.KEYDOWN :
                 if event.key == pygame.K_ESCAPE:
                     run = False
+                current_time = time.time()
+                key_space = event.key
+                # 檢查按鍵是否在去抖時間間隔內
+                if key_space in last_key_press_time:
+                    if current_time - last_key_press_time[key_space] < debounce_time:
+                        continue  # 如果在去抖時間內，跳過這個按鍵事件
+                
+                # 記錄按鍵按下的時間
+                last_key_press_time[key_space] = current_time
+                
+                # 處理按鍵事件
+                if key_space == pygame.K_SPACE:
+                    pygame.mixer.music.pause()
+                    pause_times += 1
+                    repeat, volume, attack_volume = pause_game(screen, volume, attack_volume, state)
+                    if repeat == 1:
+                        pygame.mixer.stop()
+                        return repeat
+                    elif repeat == 2:
+                        return repeat
+                    else:
+                        pygame.mixer.music.set_volume(volume)
+                        change.set_volume(volume / 3)
+                        attack.set_volume(attack_volume)
+                        pygame.mixer.music.unpause()
+                        if pause_times < 50: #避免延遲
+                            t -= 1
         #--------------------------------
+
+        
+        #---------基礎設定---------
+        #時間揁數
+        clock.tick(fps)
+        #更新畫面
+        pygame.display.flip()
+        screen.fill(bg_color[state])
 
 
         #-------game play------
@@ -275,37 +305,25 @@ def game_play():
 
         #------繪製時間軸-------
         if state == 0:
-            pygame.draw.rect(screen, bg_color[1 - state], [(screen_width - time_width) / 2, time_y, time_width * time / len, time_height], 0)
+            pygame.draw.rect(screen, bg_color[1 - state], [(screen_width - time_width) / 2, time_y, time_width * t / len, time_height], 0)
             pygame.draw.rect(screen, bg_color[1 - state], [(screen_width - time_width) / 2, time_y, time_width, time_height], int(time_height / 5))
-            pygame.draw.circle(screen, bg_color[state], ((screen_width - time_width) / 2 + time_width * time / len, time_y + time_height / 2), time_height)
-            pygame.draw.circle(screen, bg_color[1 - state], ((screen_width - time_width) / 2 + time_width * time / len, time_y + time_height / 2), time_height, int(time_height / 5))
+            pygame.draw.circle(screen, bg_color[state], ((screen_width - time_width) / 2 + time_width * t / len, time_y + time_height / 2), time_height)
+            pygame.draw.circle(screen, bg_color[1 - state], ((screen_width - time_width) / 2 + time_width * t / len, time_y + time_height / 2), time_height, int(time_height / 5))
         else:
-            pygame.draw.rect(screen, bg_color[1 - state], [(screen_width - time_width) / 2, time_y, time_width * (1 - time / len), time_height], 0)
+            pygame.draw.rect(screen, bg_color[1 - state], [(screen_width - time_width) / 2, time_y, time_width * (1 - t / len), time_height], 0)
             pygame.draw.rect(screen, bg_color[1 - state], [(screen_width - time_width) / 2, time_y, time_width, time_height], int(time_height / 5))
-            pygame.draw.circle(screen, bg_color[state], ((screen_width - time_width) / 2 + time_width * (1 - time / len), time_y + time_height / 2), time_height)
-            pygame.draw.circle(screen, bg_color[1 - state], ((screen_width - time_width) / 2 + time_width * (1 - time / len), time_y + time_height / 2), time_height, int(time_height / 5))
+            pygame.draw.circle(screen, bg_color[state], ((screen_width - time_width) / 2 + time_width * (1 - t / len), time_y + time_height / 2), time_height)
+            pygame.draw.circle(screen, bg_color[1 - state], ((screen_width - time_width) / 2 + time_width * (1 - t / len), time_y + time_height / 2), time_height, int(time_height / 5))
         #--------------------------------
 
 
         #更新時間
-        time += 1
-        if key[pygame.K_SPACE]:
-            pygame.mixer.music.pause()
-            pause_times += 1
-            repeat, volume, attack_volume = pause_game(screen, volume, attack_volume, state)
-            if repeat == 1:
-                pygame.mixer.stop()
-                return repeat
-            elif repeat == 2:
-                return repeat
-            else:
-                pygame.mixer.music.set_volume(volume)
-                change.set_volume(volume / 3)
-                attack.set_volume(attack_volume)
-                pygame.mixer.music.unpause()
-                if pause_times < 50: #避免延遲
-                    time -= 1
+        t += 1
         #----------------------
+
+        #藏起滑鼠
+        pygame.mouse.set_visible(False)
+
     return 0
 
 if __name__ == '__main__':
