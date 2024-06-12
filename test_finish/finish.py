@@ -1,5 +1,6 @@
 import pygame
-
+import cv2
+import numpy as np
 #初始化
 pygame.init()
 
@@ -17,6 +18,7 @@ clock = pygame.time.Clock()
 fps = 80
 
 #設定顏色差異、按鈕寬度、按鈕間距
+color_differece = 45
 button_width = 100
 button_distance = 150
 button_y = 600
@@ -26,13 +28,34 @@ text_size = 60
 font = pygame.font.SysFont("microsoftjhengheimicrosoftjhengheiui", text_size) #字體
 
 #讀取圖片
-home_img = pygame.image.load('src/images/Home.png')
-return_img = pygame.image.load('src/images/return.png')
+home_img = cv2.imread('src/images/Home.png')
+return_img = cv2.imread('src/images/return.png')
 
-#設定圖大小
+# Create copies of the original images
+modified_home_img = np.copy(home_img)
+modified_return_img = np.copy(return_img)
+
+# Modify the picture's RGB using color_difference
+modified_home_img[:, :, 0] -= color_differece  # Increase the blue channel
+modified_home_img[:, :, 1] -= color_differece  # Decrease the green channel
+modified_home_img[:, :, 2] -= color_differece  # Increase the red channel
+
+modified_return_img[:, :, 0] -= color_differece  # Increase the blue channel
+modified_return_img[:, :, 1] -= color_differece  # Decrease the green channel
+modified_return_img[:, :, 2] -= color_differece  # Increase the red channel
+
+#設定圖大小以及方向
 size = (100, 100)
+home_img = pygame.surfarray.make_surface(home_img)
+return_img = pygame.surfarray.make_surface(return_img)
+modified_home_img = pygame.surfarray.make_surface(modified_home_img)
+modified_return_img = pygame.surfarray.make_surface(modified_return_img)
 home_img = pygame.transform.scale(home_img, size)
 return_img = pygame.transform.scale(return_img, size)
+modified_home_img = pygame.transform.scale(modified_home_img, size)
+modified_return_img = pygame.transform.scale(modified_return_img, size)
+home_img = pygame.transform.rotate(home_img, -90)
+modified_home_img = pygame.transform.rotate(modified_home_img, -90)
 
 #設定圖片位置
 home_img_rect = home_img.get_rect()
@@ -62,9 +85,9 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
-    #顯示按鈕
-    screen.blit(home_img, home_img_rect)
-    screen.blit(return_img, return_img_rect)
+    # #顯示按鈕
+    # screen.blit(home_img, home_img_rect)
+    # screen.blit(return_img, return_img_rect)
 
     #顯示誰贏了
     if p1_win:
@@ -77,6 +100,16 @@ while run:
 
     #檢測按鈕點擊事件
     mouse_pos = pygame.mouse.get_pos()
+    if home_img_rect.collidepoint(mouse_pos):
+        screen.blit(modified_home_img, home_img_rect)
+        screen.blit(return_img, return_img_rect)
+    elif return_img_rect.collidepoint(mouse_pos):
+        screen.blit(modified_return_img, return_img_rect)
+        screen.blit(home_img, home_img_rect)
+    else:
+        screen.blit(home_img, home_img_rect)
+        screen.blit(return_img, return_img_rect)
+    
     if event.type == pygame.MOUSEBUTTONDOWN:
         if home_img_rect.collidepoint(mouse_pos):
             run = False
