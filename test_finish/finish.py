@@ -30,10 +30,12 @@ font = pygame.font.SysFont("microsoftjhengheimicrosoftjhengheiui", text_size) #�
 #讀取圖片
 home_img = cv2.imread('src/images/Home.png')
 return_img = cv2.imread('src/images/return.png')
+quit_img = cv2.imread('src/images/Quit.png')
 
 # Create copies of the original images
 modified_home_img = np.copy(home_img)
 modified_return_img = np.copy(return_img)
+modified_quit_img = np.copy(quit_img)
 
 # Modify the picture's RGB using color_difference
 modified_home_img[:, :, 0] -= color_differece  # Increase the blue channel
@@ -44,16 +46,28 @@ modified_return_img[:, :, 0] -= color_differece  # Increase the blue channel
 modified_return_img[:, :, 1] -= color_differece  # Decrease the green channel
 modified_return_img[:, :, 2] -= color_differece  # Increase the red channel
 
+modified_quit_img[:, :, 0] -= color_differece  # Increase the blue channel
+modified_quit_img[:, :, 1] -= color_differece  # Decrease the green channel
+modified_quit_img[:, :, 2] -= color_differece  # Increase the red channel
+
 #設定圖大小以及方向
 size = (100, 100)
 home_img = pygame.surfarray.make_surface(home_img)
 return_img = pygame.surfarray.make_surface(return_img)
+quit_img = pygame.surfarray.make_surface(quit_img)
+
 modified_home_img = pygame.surfarray.make_surface(modified_home_img)
 modified_return_img = pygame.surfarray.make_surface(modified_return_img)
+modified_quit_img = pygame.surfarray.make_surface(modified_quit_img)
+
 home_img = pygame.transform.scale(home_img, size)
 return_img = pygame.transform.scale(return_img, size)
+quit_img = pygame.transform.scale(quit_img, size)
+
 modified_home_img = pygame.transform.scale(modified_home_img, size)
 modified_return_img = pygame.transform.scale(modified_return_img, size)
+modified_quit_img = pygame.transform.scale(modified_quit_img, size)
+
 home_img = pygame.transform.rotate(home_img, -90)
 modified_home_img = pygame.transform.rotate(modified_home_img, -90)
 
@@ -62,6 +76,8 @@ home_img_rect = home_img.get_rect()
 home_img_rect.center = (screen_width // 2 - button_width // 2 - button_distance, button_y)
 return_img_rect = return_img.get_rect()
 return_img_rect.center = (screen_width // 2 + button_width // 2 + button_distance, button_y)
+quit_img_rect = quit_img.get_rect()
+quit_img_rect.center = (screen_width // 2, button_y)
 
 #誰贏了
 p1_win = False
@@ -103,12 +119,19 @@ while run:
     if home_img_rect.collidepoint(mouse_pos):
         screen.blit(modified_home_img, home_img_rect)
         screen.blit(return_img, return_img_rect)
+        screen.blit(quit_img, quit_img_rect)
     elif return_img_rect.collidepoint(mouse_pos):
         screen.blit(modified_return_img, return_img_rect)
         screen.blit(home_img, home_img_rect)
+        screen.blit(quit_img, quit_img_rect)
+    elif quit_img_rect.collidepoint(mouse_pos):
+        screen.blit(modified_quit_img, quit_img_rect)
+        screen.blit(home_img, home_img_rect)
+        screen.blit(return_img, return_img_rect)
     else:
         screen.blit(home_img, home_img_rect)
         screen.blit(return_img, return_img_rect)
+        screen.blit(quit_img, quit_img_rect)
     
     if event.type == pygame.MOUSEBUTTONDOWN:
         if home_img_rect.collidepoint(mouse_pos):
@@ -117,6 +140,9 @@ while run:
         elif return_img_rect.collidepoint(mouse_pos):
             run = False
             #這邊要改成再來一局
+        elif quit_img_rect.collidepoint(mouse_pos):
+            run = False
+            #這邊要改成離開遊戲
     #更新畫面
     pygame.display.update()
 
