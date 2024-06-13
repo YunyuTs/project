@@ -31,8 +31,18 @@ fps = 80
 #重複
 repeat = 0
 
+#音量
+volume = 0.3
+change_volume = volume / 3
+attack_volume = 0.3
+
 #主程式
 def game_play():
+
+    #音量設定
+    global volume
+    global change_volume
+    global attack_volume
 
     #---------背景設定---------
     player_size = 40 #玩家大小
@@ -103,18 +113,18 @@ def game_play():
     #---------音樂設定---------
     #背景音樂
     song = ['src/sound/state0.wav', 'src/sound/state1.wav']
-    volume = 0.3
+    #volume = 0.3
     pygame.mixer.music.set_volume(volume)
     len = int(pygame.mixer.Sound(song[0]).get_length() * fps)
     
     #轉場音效
     change = pygame.mixer.Sound('src/sound/change.wav')
-    change_volume = volume / 3
+    #change_volume = volume / 3
     change.set_volume(change_volume)
 
     #音效
     attack = pygame.mixer.Sound('src/sound/attack.wav')
-    attack_volume = 0.3
+    #attack_volume = 0.3
     attack.set_volume(attack_volume)
     #--------------------------------
 
@@ -122,24 +132,6 @@ def game_play():
     #---------遊戲迴圈---------
     run = True
     while run:
-        #-------音樂播放、狀態轉換-------
-        if t % 2 == 0:
-            if pygame.mixer.music.get_busy():
-                song_flag = 0
-            else:
-                #print(pygame.mixer.Channel(0).get_busy())
-                if song_flag == 0:
-                    #pygame.mixer.music.stop()
-                    t = 0
-                    change.play()
-                    state = 1 - state
-                    P1.state = state
-                    P2.state = 1 - state    
-                    pygame.mixer.music.load(song[state])
-                    pygame.mixer.music.play()
-                    song_flag = 1
-                    pause_times = 0
-        #--------------------------------
 
         #event handler
         for event in pygame.event.get():
@@ -159,10 +151,11 @@ def game_play():
                 last_key_press_time[key_space] = current_time
                 
                 # 處理按鍵事件
-                if key_space == pygame.K_SPACE:
+                if key_space == pygame.K_SPACE or key_space == pygame.K_RETURN:
                     pygame.mixer.music.pause()
                     pause_times += 1
                     repeat, volume, attack_volume = pause_game(screen, volume, attack_volume, state)
+                    change_volume = volume / 3
                     if repeat == 1:
                         pygame.mixer.stop()
                         return repeat
@@ -175,6 +168,25 @@ def game_play():
                         pygame.mixer.music.unpause()
                         if pause_times < 50: #避免延遲
                             t -= 1
+        #--------------------------------
+
+        #-------音樂播放、狀態轉換-------
+        if t % 2 == 0:
+            if pygame.mixer.music.get_busy():
+                song_flag = 0
+            else:
+                #print(pygame.mixer.Channel(0).get_busy())
+                if song_flag == 0:
+                    #pygame.mixer.music.stop()
+                    t = 0
+                    change.play()
+                    state = 1 - state
+                    P1.state = state
+                    P2.state = 1 - state    
+                    pygame.mixer.music.load(song[state])
+                    pygame.mixer.music.play()
+                    song_flag = 1
+                    pause_times = 0
         #--------------------------------
 
         

@@ -98,7 +98,7 @@ def pause_game(screen, volume, attack_volume, state):
                 last_key_press_time[key] = current_time
 
                 #處理按鍵事件
-                if key == pygame.K_SPACE:
+                if key == pygame.K_SPACE or key == pygame.K_RETURN:
                     return 0, volume, attack_volume
         
         
@@ -180,5 +180,8 @@ def pause_game(screen, volume, attack_volume, state):
         pygame.draw.circle(screen, gray, (int((screen_width - attack_volume_width) // 2 + attack_volume_width * attack_volume), attack_volume_y + attack_volume_height // 2), attack_volume_height // 2)
         pygame.draw.rect(screen, gray, [(screen_width - attack_volume_width) // 2, attack_volume_y, attack_volume_width, attack_volume_height], attack_volume_height // 5)
         
+
+        #滑鼠顯示
+        pygame.mouse.set_visible(True)
         
     return 0, volume, attack_volume
