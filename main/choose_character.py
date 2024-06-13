@@ -283,6 +283,9 @@ def choose_color():
 
         #選擇表情
         else:
+            #隱藏滑鼠
+            pygame.mouse.set_visible(False)
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
