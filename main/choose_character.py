@@ -304,6 +304,7 @@ def choose_color():
                     # 處理按鍵事件
                     if key == pygame.K_SPACE or key == pygame.K_RETURN:
                         direct.play()
+                        pygame.mixer.music.stop()
                         return bg_choice, P1_face, P2_face
                     
                     if key == pygame.K_LEFT or key == pygame.K_DOWN:
@@ -329,12 +330,16 @@ def choose_color():
                             P1_face = 0
 
                     if key == pygame.K_SPACE or key == pygame.K_RETURN:
+                        direct.play()
+                        pygame.mixer.music.stop()
                         return bg_choice, P1_face, P2_face
                 
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     current_time = time.time()
                     if current_time - last_click_time >= debounce_time:
                         if determine:
+                            direct.play()
+                            pygame.mixer.music.stop()
                             return bg_choice, P1_face, P2_face
                         last_click_time = current_time
                     
