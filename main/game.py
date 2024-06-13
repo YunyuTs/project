@@ -60,7 +60,7 @@ def game_play(play_state):
     global attack_volume
 
     #---------背景設定---------
-    player_size = 40 #玩家大小
+    player_size = 60 #玩家大小
     sp_size = 30 #衝刺物件大小
     heart_size = 40 #生命值圖片大小
     time_width, time_height = 700, 10 #時間軸大小
