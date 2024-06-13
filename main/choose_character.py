@@ -172,6 +172,50 @@ def choose_color():
                 right = 1
             else:
                 right = 0
+                
+
+            #畫邊界
+            pygame.draw.rect(screen, side_color[bg_choice][state], (bg_width, bg_height + time_y, screen_width - 2 * bg_width, screen_height - 2 * bg_height - time_y), thickness)
+            pygame.draw.rect(screen, side_color[bg_choice][1 - state], (0, 0, screen_width, bg_height + time_y))
+            pygame.draw.rect(screen, side_color[bg_choice][1 - state], (0, 0, bg_width, screen_height))
+            pygame.draw.rect(screen, side_color[bg_choice][1 - state], (0, screen_height - bg_height, screen_width, bg_height))
+            pygame.draw.rect(screen, side_color[bg_choice][1 - state], (screen_width - bg_width, 0, bg_width, screen_height))
+            
+            #透視視窗
+            if state == 0:
+                window.set_alpha(150)
+                screen.blit(window, (0, 0))
+                text = font.render("Choose your court", True, bg_color[bg_choice][1])
+                pygame.draw.rect(screen, bg_color[bg_choice][0], (screen_width // 2 - text.get_width() // 2, time_y * 2, text.get_width(), text.get_height()))
+                screen.blit(text, (screen_width // 2 - text.get_width() // 2, time_y * 2))
+            else:
+                window.set_alpha(100)
+                screen.blit(window, (0, 0))
+                text = font.render("Choose your court", True, bg_color[bg_choice][0])
+                pygame.draw.rect(screen, bg_color[bg_choice][1], (screen_width // 2 - text.get_width() // 2, time_y * 2, text.get_width(), text.get_height()))
+                screen.blit(text, (screen_width // 2 - text.get_width() // 2, time_y * 2))
+                
+
+            
+            #選擇顏色
+            rotated_img0 = pygame.transform.rotate(body_img[bg_choice][0], 20)
+            rotated_img1 = pygame.transform.rotate(body_img[bg_choice][1], -20)
+            if screen_width // 2 - img_size + tweak <= m_x <= screen_width // 2 - img_size // 2 + rotated_img1.get_width() and screen_height // 2 - img_size // 2 - bg_height <= m_y <= screen_height // 2 + bg_height + rotated_img1.get_height():
+                enter = 1
+                rotated_img0.set_alpha(180)
+                rotated_img1.set_alpha(180)
+
+            else:
+                enter = 0
+                rotated_img0.set_alpha(255)
+                rotated_img1.set_alpha(255)
+            screen.blit(rotated_img0, (screen_width // 2 - img_size + tweak, screen_height // 2 - img_size // 2 - bg_height))
+            screen.blit(rotated_img1, (screen_width // 2 - img_size // 2, screen_height // 2 + bg_height))
+            
+
+            #方向
+            screen.blit(img_direction[0][left], (distance, distance))
+            screen.blit(img_direction[1][right], (screen_width - distance - direction_size // 2, distance))
 
 
 
@@ -231,52 +275,6 @@ def choose_color():
 
                         last_click_time = current_time
 
-            #畫邊界
-            pygame.draw.rect(screen, side_color[bg_choice][state], (bg_width, bg_height + time_y, screen_width - 2 * bg_width, screen_height - 2 * bg_height - time_y), thickness)
-            pygame.draw.rect(screen, side_color[bg_choice][1 - state], (0, 0, screen_width, bg_height + time_y))
-            pygame.draw.rect(screen, side_color[bg_choice][1 - state], (0, 0, bg_width, screen_height))
-            pygame.draw.rect(screen, side_color[bg_choice][1 - state], (0, screen_height - bg_height, screen_width, bg_height))
-            pygame.draw.rect(screen, side_color[bg_choice][1 - state], (screen_width - bg_width, 0, bg_width, screen_height))
-            
-            #透視視窗
-            if state == 0:
-                window.set_alpha(150)
-                screen.blit(window, (0, 0))
-                text = font.render("Choose your court", True, bg_color[bg_choice][1])
-                pygame.draw.rect(screen, bg_color[bg_choice][0], (screen_width // 2 - text.get_width() // 2, time_y * 2, text.get_width(), text.get_height()))
-                screen.blit(text, (screen_width // 2 - text.get_width() // 2, time_y * 2))
-            else:
-                window.set_alpha(100)
-                screen.blit(window, (0, 0))
-                text = font.render("Choose your court", True, bg_color[bg_choice][0])
-                pygame.draw.rect(screen, bg_color[bg_choice][1], (screen_width // 2 - text.get_width() // 2, time_y * 2, text.get_width(), text.get_height()))
-                screen.blit(text, (screen_width // 2 - text.get_width() // 2, time_y * 2))
-                
-
-            #字體
-            # text = font.render("Choose your court", True, white)
-            # screen.blit(text, (screen_width // 2 - text.get_width() // 2, time_y * 2))
-
-            #選擇顏色
-            rotated_img0 = pygame.transform.rotate(body_img[bg_choice][0], 20)
-            rotated_img1 = pygame.transform.rotate(body_img[bg_choice][1], -20)
-            if screen_width // 2 - img_size + tweak <= m_x <= screen_width // 2 - img_size // 2 + rotated_img1.get_width() and screen_height // 2 - img_size // 2 - bg_height <= m_y <= screen_height // 2 + bg_height + rotated_img1.get_height():
-                enter = 1
-                rotated_img0.set_alpha(180)
-                rotated_img1.set_alpha(180)
-
-            else:
-                enter = 0
-                rotated_img0.set_alpha(255)
-                rotated_img1.set_alpha(255)
-            screen.blit(rotated_img0, (screen_width // 2 - img_size + tweak, screen_height // 2 - img_size // 2 - bg_height))
-            screen.blit(rotated_img1, (screen_width // 2 - img_size // 2, screen_height // 2 + bg_height))
-            
-
-            #方向
-            screen.blit(img_direction[0][left], (distance, distance))
-            screen.blit(img_direction[1][right], (screen_width - distance - direction_size // 2, distance))
-
             #時間
             if t % 250 == 0:
                 state = 1 - state
@@ -304,6 +302,7 @@ def choose_color():
                     # 處理按鍵事件
                     if key == pygame.K_SPACE or key == pygame.K_RETURN:
                         direct.play()
+                        pygame.mixer.music.stop()
                         return bg_choice, P1_face, P2_face
                     
                     if key == pygame.K_LEFT or key == pygame.K_DOWN:
@@ -329,12 +328,16 @@ def choose_color():
                             P1_face = 0
 
                     if key == pygame.K_SPACE or key == pygame.K_RETURN:
+                        direct.play()
+                        pygame.mixer.music.stop()
                         return bg_choice, P1_face, P2_face
                 
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     current_time = time.time()
                     if current_time - last_click_time >= debounce_time:
                         if determine:
+                            direct.play()
+                            pygame.mixer.music.stop()
                             return bg_choice, P1_face, P2_face
                         last_click_time = current_time
                     

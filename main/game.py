@@ -1,4 +1,5 @@
 import pygame
+import cv2
 import math
 import time
 from player import player
@@ -13,7 +14,16 @@ white = (255,255,255)
 black = (0, 0, 0)
 
 #background color
-bg_color = [(244, 224, 244), (70, 10, 80)]
+b_color_all = [[(244, 224, 244), (93, 29, 104)], #(229, 159, 228), (124, 55, 136)
+            [(199, 244, 255), (4, 93, 125)], #(159, 229, 228), (55, 124, 136)
+            [(255, 172, 170), (108, 21, 30)], #(229, 228, 159), (124, 136, 55)
+            [(224, 244, 224), (29, 93, 29)]] #(159, 229, 159), (55, 124, 55)
+s_color_all = [[(93, 29, 104), (255, 226, 251)],
+              [(4, 93, 125), (201, 255, 255)],
+              [(108, 21, 30), (255, 183, 177)],
+              [(29, 93, 29), (226, 255, 226)]] #邊界顏色
+rm_back = [(0, 0, 0), (231, 0, 96), (79, 184, 182), (0, 0, 0)]
+#------------------------------------------------
 
 #設定畫面大小
 screen_width = 1280
@@ -37,7 +47,12 @@ change_volume = volume / 3
 attack_volume = 0.3
 
 #主程式
-def game_play():
+def game_play(play_state):
+
+    #設定變數
+    color = play_state[0]
+    p1_face = play_state[1]
+    p2_face = play_state[2]
 
     #音量設定
     global volume
@@ -45,14 +60,15 @@ def game_play():
     global attack_volume
 
     #---------背景設定---------
-    player_size = 40 #玩家大小
+    player_size = 60 #玩家大小
     sp_size = 30 #衝刺物件大小
     heart_size = 40 #生命值圖片大小
     time_width, time_height = 700, 10 #時間軸大小
     time_y = 30 #時間軸位置
     bg_width, bg_height = 100, 20 #場地大小
     thickness = 40 #邊界寬度
-    side_color = [(93, 29, 104), (255, 226, 251)] #邊界顏色
+    bg_color = b_color_all[color] #背景顏色
+    side_color = s_color_all[color] #邊界顏色
     tweak = 10 #調整位置
     font = pygame.font.SysFont("microsoftjhengheimicrosoftjhengheiui", int(player_size * 3 / 5)) #字體
     min_speed = 3 #玩家最小速度
@@ -78,30 +94,207 @@ def game_play():
     #設定玩家圖片
     img_player1 = []
     img_player2 = []
-
-    #load images
-    for i in range(2):
-        img = pygame.image.load('src/images/player' + str(0) + str(i) + '.png')
-        img_player1.append(pygame.transform.scale(img, (player_size, player_size)))
-        img = pygame.image.load('src/images/player' + str(1) + str(i) + '.png')
-        img_player2.append(pygame.transform.scale(img, (player_size, player_size)))
-
+    
+    #faces img load
+    face_P1 = []
+    face_P2 = []
+    
     #設定衝刺物件圖片
     img_sp = []
-
-    #load images
-    for i in range(2):
-        img = pygame.image.load('src/images/sprint' + str(i) + '.png')
-        img_sp.append(pygame.transform.scale(img, (sp_size, sp_size)))
-
+    
     #生命值圖片
     Life = []
 
     #load images
-    for i in range(2):
-        img = pygame.image.load('src/images/Life' + str(i) + '.png')
-        Life.append(pygame.transform.scale(img, (heart_size, heart_size)))
+    if color == 0:
+        for i in range(2):
+            #body
+            img = pygame.image.load('src/images/Player' + str(i) + '.png')
+            img.set_colorkey(rm_back[color])
+            img = pygame.transform.scale(img, (player_size, player_size))
+            img_player1.append(img)
+            img = pygame.image.load('src/images/Player' + str(i) + '.png')
+            img.set_colorkey(rm_back[color])
+            img = pygame.transform.scale(img, (player_size, player_size))
+            img_player2.append(img)   
+            
+            #face
+            img = pygame.image.load('src/images/face/' + str(p1_face) + str(i) + '.png')
+            img = pygame.transform.scale(img, (player_size, player_size))
+            img.set_colorkey(rm_back[color])
+            face_P1.append(img)
+            img = pygame.image.load('src/images/face/' + str(p2_face) + str(i) + '.png')
+            img = pygame.transform.scale(img, (player_size, player_size))
+            img.set_colorkey(rm_back[color])
+            face_P2.append(img)
 
+            #sprint
+            img = pygame.image.load('src/images/Sp' + str(i) + '.png')
+            img.set_colorkey(rm_back[color])
+            img_sp.append(pygame.transform.scale(img, (sp_size, sp_size)))
+
+            #life
+            img = pygame.image.load('src/images/Lif' + str(i) + '.png')
+            img.set_colorkey(rm_back[color])
+            Life.append(pygame.transform.scale(img, (heart_size, heart_size)))
+
+    elif color == 1:
+        for i in range(2):
+            #body
+            img = cv2.imread('src/images/Player' + str(i) + '.png')
+            B, G, R = cv2.split(img)
+            img = cv2.merge([G - 25, R, G + 96])
+            img = pygame.surfarray.make_surface(cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE))
+            img = pygame.transform.scale(img, (player_size, player_size))
+            img.set_colorkey(rm_back[color])
+            img_player1.append(img)
+            img = cv2.imread('src/images/Player' + str(i) + '.png')
+            B, G, R = cv2.split(img)
+            img = cv2.merge([G - 25, R, G + 96])
+            img = pygame.surfarray.make_surface(cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE))
+            img = pygame.transform.scale(img, (player_size, player_size))
+            img.set_colorkey(rm_back[color])
+            img_player2.append(img)
+
+            #face
+            img = cv2.imread('src/images/face/' + str(p1_face) + str(i) + '.png')
+            B, G, R = cv2.split(img)
+            img = cv2.merge([G - 25, R, G + 96])
+            img = pygame.surfarray.make_surface(cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE))
+            img = pygame.transform.scale(img, (player_size, player_size))
+            img.set_colorkey(rm_back[color])
+            face_P1.append(img)
+            img = cv2.imread('src/images/face/' + str(p2_face) + str(i) + '.png')
+            B, G, R = cv2.split(img)
+            img = cv2.merge([G - 25, R, G + 96])
+            img = pygame.surfarray.make_surface(cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE))
+            img = pygame.transform.scale(img, (player_size, player_size))
+            img.set_colorkey(rm_back[color])
+            face_P2.append(img)
+
+            #sprint
+            img = cv2.imread('src/images/Sp' + str(i) + '.png')
+            B, G, R = cv2.split(img)
+            img = cv2.merge([G - 25, R, G + 96])
+            img = pygame.surfarray.make_surface(cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE))
+            img = pygame.transform.scale(img, (sp_size, sp_size))
+            img.set_colorkey(rm_back[color])
+            img_sp.append(img)
+
+            #life
+            img = cv2.imread('src/images/Lif' + str(i) + '.png')
+            B, G, R = cv2.split(img)
+            img = cv2.merge([G - 25, R, G + 96])
+            img = pygame.surfarray.make_surface(cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE))
+            img = pygame.transform.scale(img, (heart_size, heart_size))
+            img.set_colorkey(rm_back[color])
+            Life.append(img)
+
+    elif color == 2:
+        for i in range(2):
+            #body
+            img = cv2.imread('src/images/Player' + str(i) + '.png')
+            B, G, R = cv2.split(img)
+            img = cv2.merge([G + 79, B - 72, R - 74])
+            img = pygame.surfarray.make_surface(cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE))
+            img = pygame.transform.scale(img, (player_size, player_size))
+            img.set_colorkey(rm_back[color])
+            img_player1.append(img)
+            img = cv2.imread('src/images/Player' + str(i) + '.png')
+            B, G, R = cv2.split(img)
+            img = cv2.merge([G + 79, B - 72, R - 74])
+            img = pygame.surfarray.make_surface(cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE))
+            img = pygame.transform.scale(img, (player_size, player_size))
+            img.set_colorkey(rm_back[color])
+            img_player2.append(img)
+
+            #face
+            img = cv2.imread('src/images/face/' + str(p1_face) + str(i) + '.png')
+            B, G, R = cv2.split(img)
+            img = cv2.merge([G + 79, B - 72, R - 74])
+            img = pygame.surfarray.make_surface(cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)) 
+            img = pygame.transform.scale(img, (player_size, player_size))
+            img.set_colorkey(rm_back[color])
+            face_P1.append(img)
+            img = cv2.imread('src/images/face/' + str(p2_face) + str(i) + '.png')
+            B, G, R = cv2.split(img)
+            img = cv2.merge([G + 79, B - 72, R - 74])
+            img = pygame.surfarray.make_surface(cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE))
+            img = pygame.transform.scale(img, (player_size, player_size))
+            img.set_colorkey(rm_back[color])
+            face_P2.append(img)
+
+            #sprint
+            img = cv2.imread('src/images/Sp' + str(i) + '.png')
+            B, G, R = cv2.split(img)
+            img = cv2.merge([G + 79, B - 72, R - 74])
+            img = pygame.surfarray.make_surface(cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE))
+            img = pygame.transform.scale(img, (sp_size, sp_size))
+            img.set_colorkey(rm_back[color])
+            img_sp.append(img)
+
+            #life
+            img = cv2.imread('src/images/Lif' + str(i) + '.png')
+            B, G, R = cv2.split(img)
+            img = cv2.merge([G + 79, B - 72, R - 74])
+            img = pygame.surfarray.make_surface(cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE))
+            img = pygame.transform.scale(img, (heart_size, heart_size))
+            img.set_colorkey(rm_back[color])
+            Life.append(img)
+
+    else:
+        for i in range(2):
+            #body
+            img = cv2.imread('src/images/Player' + str(i) + '.png')
+            B, G, R = cv2.split(img)
+            img = cv2.merge([G, R, G])
+            img = pygame.surfarray.make_surface(cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE))
+            img = pygame.transform.scale(img, (player_size, player_size))
+            img.set_colorkey(rm_back[color])
+            img_player1.append(img)
+            img = cv2.imread('src/images/Player' + str(i) + '.png')
+            B, G, R = cv2.split(img)
+            img = cv2.merge([G, R, G])
+            img = pygame.surfarray.make_surface(cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE))
+            img = pygame.transform.scale(img, (player_size, player_size))
+            img.set_colorkey(rm_back[color])
+            img_player2.append(img)
+
+            #face
+            img = cv2.imread('src/images/face/' + str(p1_face) + str(i) + '.png')
+            B, G, R = cv2.split(img)
+            img = cv2.merge([G, R, G])
+            img = pygame.surfarray.make_surface(cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE))
+            img = pygame.transform.scale(img, (player_size, player_size))
+            img.set_colorkey(rm_back[color])
+            face_P1.append(img)
+            img = cv2.imread('src/images/face/' + str(p2_face) + str(i) + '.png')
+            B, G, R = cv2.split(img)
+            img = cv2.merge([G, R, G])
+            img = pygame.surfarray.make_surface(cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE))
+            img = pygame.transform.scale(img, (player_size, player_size))
+            img.set_colorkey(rm_back[color])
+            face_P2.append(img)
+
+            #sprint
+            img = cv2.imread('src/images/Sp' + str(i) + '.png')
+            B, G, R = cv2.split(img)
+            img = cv2.merge([G, R, G])
+            img = pygame.surfarray.make_surface(cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE))
+            img = pygame.transform.scale(img, (sp_size, sp_size))
+            img.set_colorkey(rm_back[color])
+            img_sp.append(img)
+
+            #life
+            img = cv2.imread('src/images/Lif' + str(i) + '.png')
+            B, G, R = cv2.split(img)
+            img = cv2.merge([G, R, G])
+            img = pygame.surfarray.make_surface(cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE))
+            img = pygame.transform.scale(img, (heart_size, heart_size))
+            img.set_colorkey(rm_back[color])
+            Life.append(img)
+
+    
     #玩家基本設定
     P1 = player(bg_width + thickness + player_size, screen_height / 2 + time_y,
                 min_speed, 0, 8, 0, 0, [0, 0, 0])
@@ -112,7 +305,7 @@ def game_play():
 
     #---------音樂設定---------
     #背景音樂
-    song = ['src/sound/song2/0.wav', 'src/sound/song2/1.wav']
+    song = ['src/sound/song' + str(color) + '/0.wav', 'src/sound/song' + str(color) + '/1.wav']
     #volume = 0.3
     pygame.mixer.music.set_volume(volume)
     len = int(pygame.mixer.Sound(song[0]).get_length() * fps)
@@ -276,14 +469,14 @@ def game_play():
         #繪製玩家
         if state == 0:
             P2.drift(screen, img_sp[1 - state])
-            P2.draw(screen, img_player2[1 - state], invince_time)
+            P2.draw(screen, img_player2[1 - state], face_P2[1 - state], invince_time)
             P1.drift(screen, img_sp[state])
-            P1.draw(screen, img_player1[state], invince_time)
+            P1.draw(screen, img_player1[state], face_P1[state], invince_time)
         else:
             P1.drift(screen, img_sp[state])
-            P1.draw(screen, img_player1[state], invince_time)
+            P1.draw(screen, img_player1[state], face_P1[state], invince_time)
             P2.drift(screen, img_sp[1 - state])
-            P2.draw(screen, img_player2[1 - state], invince_time)
+            P2.draw(screen, img_player2[1 - state], face_P2[1 - state], invince_time)
         #--------------------------------------------------
 
 
@@ -293,12 +486,19 @@ def game_play():
         pygame.draw.rect(screen, side_color[1 - state], (0, 0, bg_width, screen_height))
         pygame.draw.rect(screen, side_color[1 - state], (0, screen_height - bg_height, screen_width, bg_height))
         pygame.draw.rect(screen, side_color[1 - state], (screen_width - bg_width, 0, bg_width, screen_height))
+        #--------------------------------
+        
+        
+        #------------draw life--------
         p1_pos = (bg_width - player_size - tweak, screen_height - player_size - tweak)
         screen.blit(img_player1[state], p1_pos)
+        screen.blit(face_P1[state], p1_pos)
         for i in range(P1.life):
             screen.blit(Life[state], (p1_pos[0] + (player_size - heart_size) / 2, p1_pos[1] - heart_size * (i + 1)))
+        
         p2_pos = (screen_width - bg_width + tweak, screen_height - player_size - tweak)
         screen.blit(img_player2[1 - state], p2_pos)
+        screen.blit(face_P2[1 - state], p2_pos)
         for i in range(P2.life):
             screen.blit(Life[1 - state], (p2_pos[0] + (player_size - heart_size) / 2, p1_pos[1] - heart_size * (i + 1)))
         #--------------------------------
@@ -342,7 +542,7 @@ if __name__ == '__main__':
     repeat = 1
     while repeat:
         repeat = 0
-        repeat = game_play()
+        repeat = game_play((1, 0, 3))
         if repeat == 3:
             print("P1 win")
         elif repeat == 4:
