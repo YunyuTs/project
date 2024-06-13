@@ -3,9 +3,9 @@ import math
 import random
 from module import blitRotate #turn from center
 
-#設定玩家最大最小速度
-max_speed = 8
-min_speed = 3
+# #設定玩家最大最小速度
+# max_speed = 8
+# min_speed = 3
 
 #角速度
 ang_speed = 5
@@ -51,9 +51,10 @@ class sprint():
 class player():
     def __init__(
             self, x = 0, y = 0, #中心點
-            speed = min_speed, ang = 0, #速度, 角度
+            speed = 3, ang = 0, #速度, 角度
             life = 8, state = 0, sprint_time = 0, #生命值, 狀態(攻擊, 防禦), 衝刺時間
             drift_parts = [0, 0, 0], #衝刺物件
+            max_speed = 8, min_speed = 3, #最大速度, 最小速度
             ):
         self.x = x
         self.y = y
