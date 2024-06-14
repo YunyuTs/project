@@ -389,6 +389,7 @@ def game_play(play_state):
                         pygame.mixer.stop()
                         return repeat
                     elif repeat == 2:
+                        pygame.mixer.stop()
                         return repeat
                     else:
                         pygame.mixer.music.set_volume(volume)
@@ -538,11 +539,13 @@ def game_play(play_state):
                 if state == 0:
                     P2.life -= 1
                     if P2.life <= 0:
+                        pygame.mixer.stop()
                         return 3
                         run = False
                 else:
                     P1.life -= 1
                     if P1.life <= 0:
+                        pygame.mixer.stop()
                         return 4
                         run = False
         else:
@@ -653,6 +656,7 @@ def game_play(play_state):
         #藏起滑鼠
         pygame.mouse.set_visible(False)
 
+    pygame.mixer.stop()
     return 0
 
 if __name__ == '__main__':
