@@ -1,12 +1,13 @@
 import pygame
 import cv2
 import numpy as np
+    
+#初始化
+pygame.init()
+
 def finish(p1_win):
     #滑鼠顯示
     pygame.mouse.set_visible(True)
-    
-    #初始化
-    pygame.init()
 
     #設定顏色
     white = (255,255,255)
@@ -66,8 +67,11 @@ def finish(p1_win):
     modified_quit_img = pygame.surfarray.make_surface(modified_quit_img)
 
     home_img = pygame.transform.scale(home_img, size)
+    home_img.set_colorkey(black)
     return_img = pygame.transform.scale(return_img, size)
+    return_img.set_colorkey(black)
     quit_img = pygame.transform.scale(quit_img, size)
+    quit_img.set_colorkey(black)
 
     modified_home_img = pygame.transform.scale(modified_home_img, size)
     modified_return_img = pygame.transform.scale(modified_return_img, size)
@@ -158,5 +162,5 @@ def finish(p1_win):
         pygame.display.update()
 
     #pygame.quit()
-    if __name__ == "__main__":
-        finish(1)
+if __name__ == "__main__":
+    finish(1)
