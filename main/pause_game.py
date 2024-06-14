@@ -138,17 +138,26 @@ def pause_game(screen, volume, attack_volume, state):
 
         #畫出按鈕
         pause_surface = pygame.surfarray.make_surface(cv2.rotate(img_pause[p], cv2.ROTATE_90_CLOCKWISE))
-        pause_surface.set_colorkey(background_color[1])
+        if p == 0:
+            pause_surface.set_colorkey(background_color[0])
+        else:
+            pause_surface.set_colorkey(background_color[1])
         pause_surface = pygame.transform.scale(pause_surface, (button_width, button_width))
         screen.blit(pause_surface, (screen_width // 2 - button_distance - button_width // 2, button_y))
         
         return_surface = pygame.surfarray.make_surface(cv2.flip(img_return[r], 1))
-        return_surface.set_colorkey(background_color[1])
+        if r == 0:
+            return_surface.set_colorkey(background_color[0])
+        else:
+            return_surface.set_colorkey(background_color[1])
         return_surface = pygame.transform.scale(return_surface, (button_width, button_width))
         screen.blit(return_surface, (screen_width // 2 - button_width // 2, button_y))
 
         home_surface = pygame.surfarray.make_surface(cv2.rotate(img_home[h], cv2.ROTATE_90_COUNTERCLOCKWISE))
-        home_surface.set_colorkey(background_color[1])
+        if h == 0:
+            home_surface.set_colorkey(background_color[0])
+        else:
+            home_surface.set_colorkey(background_color[1])
         home_surface = pygame.transform.scale(home_surface, (button_width, button_width))
         screen.blit(home_surface, (screen_width // 2 + button_distance - button_width // 2, button_y))
         #------------------------------------------------
