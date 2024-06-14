@@ -5,6 +5,7 @@ import random
 import time
 from player import player
 from pause_game import pause_game
+from finish import finish
 
 #初始化
 pygame.init()
@@ -49,10 +50,10 @@ attack_volume = 0.3
 
 #效果
 effects = 4
-st_rate = [1, 1] #換場率
-adsp_rate = [2, 2] #衝刺率
-size_rate = [3, 3] #大小率
-hp_rate = [4, 4] #加生命值率
+st_rate = [1, 1] #換場率 1/4
+adsp_rate = [2, 2] #衝刺率 1/4
+size_rate = [3, 3] #大小率 1/4
+hp_rate = [4, 4] #加生命值率 1/4
 
 #道具效果
 or_max_speed = 8 #原始最大速度
@@ -388,10 +389,10 @@ def game_play(play_state):
                     repeat, volume, attack_volume = pause_game(screen, volume, attack_volume, state)
                     change_volume = volume / 2
                     if repeat == 1:
-                        pygame.mixer.stop()
+                        pygame.mixer.music.stop()
                         return repeat
                     elif repeat == 2:
-                        pygame.mixer.stop()
+                        pygame.mixer.music.stop()
                         return repeat
                     else:
                         pygame.mixer.music.set_volume(volume)
@@ -541,13 +542,13 @@ def game_play(play_state):
                 if state == 0:
                     P2.life -= 1
                     if P2.life <= 0:
-                        pygame.mixer.stop()
+                        pygame.mixer.music.stop()
                         return 3
                         run = False
                 else:
                     P1.life -= 1
                     if P1.life <= 0:
-                        pygame.mixer.stop()
+                        pygame.mixer.music.stop()
                         return 4
                         run = False
         else:
@@ -658,7 +659,7 @@ def game_play(play_state):
         #藏起滑鼠
         pygame.mouse.set_visible(False)
 
-    pygame.mixer.stop()
+    pygame.mixer.music.stop()
     return 0
 
 if __name__ == '__main__':
