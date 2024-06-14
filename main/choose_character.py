@@ -1,6 +1,7 @@
 import pygame
 import cv2
 import time
+import numpy as np
 
 #pygame初始化
 pygame.init()
@@ -395,7 +396,7 @@ def choose_color():
             B1, G1, R1 = cv2.split(P1_direct)
             P2_direct = cv2.imread('src/images/P2direct.png')
             B2, G2, R2 = cv2.split(P2_direct)
-            space_img = cv2.imread('src/images/space.png')
+            space_img = cv2.imread('src/images/Space.png')
             B3, G3, R3 = cv2.split(space_img)
 
             if bg_choice == 0:

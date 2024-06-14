@@ -20,7 +20,7 @@ def main():
         elif repeat > 2:
             pygame.mixer.music.load("src/sound/victory_sound.mp3")
             pygame.mixer.music.play()
-            go_on = finish(4 - repeat)
+            go_on = finish(4 - repeat, choixe[0])
             pygame.mixer.music.stop()
 
         if go_on == 1:

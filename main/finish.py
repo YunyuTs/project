@@ -5,8 +5,18 @@ import numpy as np
 #初始化
 pygame.init()
 
+#background color
+b_color_all = [[(244, 224, 244), (93, 29, 104)], #(229, 159, 228), (124, 55, 136)
+            [(199, 244, 255), (4, 93, 125)], #(159, 229, 228), (55, 124, 136)
+            [(255, 172, 170), (108, 21, 30)], #(229, 228, 159), (124, 136, 55)
+            [(224, 244, 224), (29, 93, 29)]] #(159, 229, 159), (55, 124, 55)
+s_color_all = [[(93, 29, 104), (255, 226, 251)],
+              [(4, 93, 125), (201, 255, 255)],
+              [(108, 21, 30), (255, 183, 177)],
+              [(29, 93, 29), (226, 255, 226)]] #邊界顏色
 
-def finish(p1_win):
+
+def finish(p1_win, color):
     #滑鼠顯示
     pygame.mouse.set_visible(True)
 
@@ -107,12 +117,48 @@ def finish(p1_win):
     # home = 0
     # replay = 0
 
+    #時間
+    time = 0
+    bg = 0
+    
+    bg_width, bg_height = 100, 20 #場地大小
+    time_y = 30 #時間軸位置
+    thickness = 40 #邊界寬度
+    window = pygame.Surface((screen_width, screen_height))
+    window.fill((0, 0, 0))
+    window.set_alpha(100)
+
     #迴圈
     run = True
     while run:
 
+        if time % 250 == 0:
+            bg = 1 - bg
+        time += 1
+
         #設定背景
-        screen.fill((background_color))
+        screen.fill((b_color_all[color][bg]))
+        #畫邊界
+        #畫邊界
+            # pygame.draw.rect(screen, side_color[bg_choice][state], (bg_width, bg_height + time_y, screen_width - 2 * bg_width, screen_height - 2 * bg_height - time_y), thickness)
+            # pygame.draw.rect(screen, side_color[bg_choice][1 - state], (0, 0, screen_width, bg_height + time_y))
+            # pygame.draw.rect(screen, side_color[bg_choice][1 - state], (0, 0, bg_width, screen_height))
+            # pygame.draw.rect(screen, side_color[bg_choice][1 - state], (0, screen_height - bg_height, screen_width, bg_height))
+            # pygame.draw.rect(screen, side_color[bg_choice][1 - state], (screen_width - bg_width, 0, bg_width, screen_height))
+        pygame.draw.rect(screen, s_color_all[color][bg], (bg_width, bg_height + time_y, screen_width - 2 * bg_width, screen_height - 2 * bg_height - time_y), thickness)
+        pygame.draw.rect(screen, s_color_all[color][1 - bg], (0, 0, screen_width, bg_height + time_y))
+        pygame.draw.rect(screen, s_color_all[color][1 - bg], (0, 0, bg_width, screen_height))
+        pygame.draw.rect(screen, s_color_all[color][1 - bg], (0, screen_height - bg_height, screen_width, bg_height))
+        pygame.draw.rect(screen, s_color_all[color][1 - bg], (screen_width - bg_width, 0, bg_width, screen_height))
+
+        
+        #透視視窗
+        if bg == 0:
+            window.set_alpha(80)
+        else:
+            window.set_alpha(100)
+        screen.blit(window, (0, 0))
+
 
         #時間揁數
         clock.tick(fps)
@@ -128,9 +174,9 @@ def finish(p1_win):
 
         #顯示誰贏了
         if P1_Win:
-            text = font.render('Battle Finish !! Player 1 Wins!', True, text_color)
+            text = font.render('Battle Finish !! Player 1 Wins!', True, s_color_all[color][bg])
         else:
-            text = font.render('Battle Finish !! Player 2 Wins!', True, text_color)
+            text = font.render('Battle Finish !! Player 2 Wins!', True, s_color_all[color][bg])
         text_rect = text.get_rect()
         text_rect.center = (screen_width // 2, screen_height // 2 - 200)
         screen.blit(text, text_rect)
@@ -174,4 +220,4 @@ def finish(p1_win):
 
     #pygame.quit()
 if __name__ == "__main__":
-    finish(1)
+    finish(1, 0)
