@@ -34,7 +34,7 @@ attack_volume_y = 320 #攻擊音量條y座標
 text_size = 60
 font = pygame.font.SysFont("microsoftjhengheimicrosoftjhengheiui", text_size) #字體
 volume_text = font.render('Volume', True, gray) #設定音量文字
-attack_volume_text = font.render('Effect Volumes', True, gray) #設定攻擊音量文字
+attack_volume_text = font.render('Attack Volume', True, gray) #設定攻擊音量文字
 
 
 #讀取圖片

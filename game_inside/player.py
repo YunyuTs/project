@@ -119,15 +119,13 @@ class player():
     
     #--------------------------------------------------------------
 
-    def draw(self, screen, img, face, invince_time, size): #畫出玩家
-        img_tmp = pygame.transform.scale(img, (size, size))
-        face_tmp = pygame.transform.scale(face, (size, size))
+    def draw(self, screen, img, face, invince_time): #畫出玩家
         if self.state == 0:
-            blitRotate(screen, img_tmp, self.getpos(), (size / 2, size / 2), self.ang)
-            blitRotate(screen, face_tmp, self.getpos(), (size / 2, size / 2), self.ang)
+            blitRotate(screen, img, self.getpos(), (img.get_width() / 2, img.get_height() / 2), self.ang)
+            blitRotate(screen, face, self.getpos(), (face.get_width() / 2, face.get_height() / 2), self.ang)
         if (invince_time % 50 < 25 or invince_time <= 0):
-            blitRotate(screen, img_tmp, self.getpos(), (size / 2, size / 2), self.ang)
-            blitRotate(screen, face_tmp, self.getpos(), (size / 2, size / 2), self.ang)
+            blitRotate(screen, img, self.getpos(), (img.get_width() / 2, img.get_height() / 2), self.ang)
+            blitRotate(screen, face, self.getpos(), (face.get_width() / 2, face.get_height() / 2), self.ang)
 
     #--------------------------------------------------------------
     
