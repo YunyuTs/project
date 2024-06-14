@@ -75,52 +75,54 @@ quit_text_rect = quit_text.get_rect()
 quit_text_rect.center = quit_img_rect.center
 
 
-# 遊戲迴圈
-running = True
-while running:
-    # 事件處理
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+def start_loop():
+    # 遊戲迴圈
+    running = True
+    while running:
+        # 事件處理
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
-    # 更新遊戲畫面
-    screen.fill(background_color)
-    screen.blit(title_img, title_img_rect)
+        # 更新遊戲畫面
+        screen.fill(background_color)
+        screen.blit(title_img, title_img_rect)
 
-    # 檢測鼠標懸停事件
-    mouse_pos = pygame.mouse.get_pos()
-    if start_img_rect.collidepoint(mouse_pos): # 白框226
-        screen.blit(start_surfaces[1], start_img_rect.topleft)
-    else:
-        start_surfaces[0].set_colorkey((0, 0, 0))
-        screen.blit(start_surfaces[0], start_img_rect.topleft)
+        # 檢測鼠標懸停事件
+        mouse_pos = pygame.mouse.get_pos()
+        if start_img_rect.collidepoint(mouse_pos): # 白框226
+            screen.blit(start_surfaces[1], start_img_rect.topleft)
+        else:
+            start_surfaces[0].set_colorkey((0, 0, 0))
+            screen.blit(start_surfaces[0], start_img_rect.topleft)
 
-    if teaching_img_rect.collidepoint(mouse_pos):
-        screen.blit(teaching_surfaces[1], teaching_img_rect.topleft)
-    else:
-        teaching_surfaces[0].set_colorkey((0, 0, 0))
-        screen.blit(teaching_surfaces[0], teaching_img_rect.topleft)
+        if teaching_img_rect.collidepoint(mouse_pos):
+            screen.blit(teaching_surfaces[1], teaching_img_rect.topleft)
+        else:
+            teaching_surfaces[0].set_colorkey((0, 0, 0))
+            screen.blit(teaching_surfaces[0], teaching_img_rect.topleft)
 
-    if quit_img_rect.collidepoint(mouse_pos):
-        screen.blit(quit_surfaces[1], quit_img_rect.topleft)
-    else:
-        quit_surfaces[0].set_colorkey((0, 0, 0))
-        screen.blit(quit_surfaces[0], quit_img_rect.topleft)
+        if quit_img_rect.collidepoint(mouse_pos):
+            screen.blit(quit_surfaces[1], quit_img_rect.topleft)
+        else:
+            quit_surfaces[0].set_colorkey((0, 0, 0))
+            screen.blit(quit_surfaces[0], quit_img_rect.topleft)
 
-    screen.blit(start_text, start_text_rect)
-    screen.blit(teaching_text, teaching_text_rect)
-    screen.blit(quit_text, quit_text_rect)
-    
-    if event.type == pygame.MOUSEBUTTONDOWN:
-        if start_img_rect.collidepoint(mouse_pos):
-            pass
-        elif teaching_img_rect.collidepoint(mouse_pos):
-            pass
-        elif quit_img_rect.collidepoint(mouse_pos):
-            running = False
-        #更新畫面  
+        screen.blit(start_text, start_text_rect)
+        screen.blit(teaching_text, teaching_text_rect)
+        screen.blit(quit_text, quit_text_rect)
 
-    pygame.display.flip()
-    clock.tick(fps)
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if start_img_rect.collidepoint(mouse_pos):
+                pass
+            elif teaching_img_rect.collidepoint(mouse_pos):
+                pass
+            elif quit_img_rect.collidepoint(mouse_pos):
+                running = False
+            #更新畫面  
 
-pygame.quit()
+        pygame.display.flip()
+        clock.tick(fps)
+
+# 遊戲開始
+
