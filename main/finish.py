@@ -119,9 +119,11 @@ def finish(p1_win):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                return 0
                 run = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
+                    return 0
                     run = False
 
         #顯示誰贏了

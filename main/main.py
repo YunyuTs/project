@@ -6,6 +6,9 @@ from finish import finish
 #設定標題
 pygame.display.set_caption("Poko")
 
+#音樂
+pygame.mixer.init()
+
 def main():
     repeat = 5
     go_on = -1
@@ -14,10 +17,11 @@ def main():
             choice = choose_color()
             repeat = 1
             continue
-        elif repeat == 3:
-            go_on = finish(1)
-        elif repeat == 4:
-            go_on = finish(0)
+        elif repeat > 2:
+            pygame.mixer.music.load("src/sound/victory_sound.mp3")
+            pygame.mixer.music.play()
+            go_on = finish(4 - repeat)
+            pygame.mixer.music.stop()
 
         if go_on == 1:
             repeat = 2
