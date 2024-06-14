@@ -61,7 +61,7 @@ or_min_speed = 3 #原始最小速度
 pr_max_adsp = 20 #最大速度
 pr_min_adsp = 7 #最小速度
 adsp_time = 500 #衝次時間
-pr_size = 1.5 #大小
+pr_size = 2 #大小
 size_time = 1000 #大小變化時間
 max_life = 8 #最大生命值
 
@@ -403,6 +403,11 @@ def game_play(play_state):
                             t -= 1
         #--------------------------------
 
+        
+        if st_rate[0] <= prop_effect <= st_rate[1]:
+            t = 0
+            pygame.mixer.music.stop()
+
         #-------音樂播放、狀態轉換-------
         if t % 2 == 0:
             if pygame.mixer.music.get_busy():
@@ -449,20 +454,6 @@ def game_play(play_state):
                 print(prop_effect)
             pygame.draw.rect(screen, (0, 0, 0), (prop_x - prop_size // 2, prop_y - prop_size // 2, prop_size, prop_size))
 
-        if st_rate[0] <= prop_effect <= st_rate[1]:
-            t = 0
-            change.play()
-            state = 1 - state
-            P1.state = state
-            P2.state = 1 - state    
-            pygame.mixer.music.load(song[state])
-            pygame.mixer.music.play()
-            song_flag = 1
-            pause_times = 0
-            prop_touch = 0
-            prop_effect = -1
-            prop_x = random.randint(prop_x_min, prop_x_max) #道具位置 中心
-            prop_y = random.randint(prop_y_min, prop_y_max) #道具位置 中心
 
         if adsp_rate[0] <= prop_effect <= adsp_rate[1]:
             pr_adsp = adsp_time
@@ -483,9 +474,21 @@ def game_play(play_state):
         if pr_adsp > 0:
             pr_adsp -= 1
             if prop_touch == 1:
+                circle_surface = pygame.Surface((P1_size * 3 // 2, P1_size * 3 // 2), pygame.SRCALPHA)
+                pygame.draw.circle(circle_surface, (255, 245, 223, 160), (P1_size * 3 // 4, P1_size * 3 // 4), P1_size * 3 // 4)
+                screen.blit(circle_surface, (P1.x - P1_size * 3 // 4, P1.y - P1_size * 3 // 4))
+                circle_surface = pygame.Surface((P1_size * 5 // 4, P1_size * 5 // 4), pygame.SRCALPHA)
+                pygame.draw.circle(circle_surface, (255, 193, 128, 160), (P1_size * 5 // 8, P1_size * 5 // 8), P1_size * 5 // 8)
+                screen.blit(circle_surface, (P1.x - P1_size * 5 // 8, P1.y - P1_size * 5 // 8))
                 P1.max_speed = pr_max_adsp
                 P1.min_speed = pr_min_adsp
             elif prop_touch == 2:
+                circle_surface = pygame.Surface((P2_size * 3 // 2, P2_size * 3 // 2), pygame.SRCALPHA)
+                pygame.draw.circle(circle_surface, (255, 245, 223, 160), (P2_size * 3 // 4, P2_size * 3 // 4), P2_size * 3 // 4)
+                screen.blit(circle_surface, (P2.x - P2_size * 3 // 4, P2.y - P2_size * 3 // 4))
+                circle_surface = pygame.Surface((P2_size * 5 // 4, P2_size * 5 // 4), pygame.SRCALPHA)
+                pygame.draw.circle(circle_surface, (255, 193, 128, 160), (P2_size * 5 // 8, P2_size * 5 // 8), P2_size * 5 // 8)
+                screen.blit(circle_surface, (P2.x - P2_size * 5 // 8, P2.y - P2_size * 5 // 8))
                 P2.max_speed = pr_max_adsp
                 P2.min_speed = pr_min_adsp
         else:
@@ -590,13 +593,13 @@ def game_play(play_state):
 
         #繪製玩家
         if state == 0:
-            P2.drift(screen, img_sp[1 - state])
-            P1.drift(screen, img_sp[state])
+            P2.drift(screen, pygame.transform.scale(img_sp[1 - state], (sp_size * P2_size // player_size, sp_size * P2_size // player_size)))
+            P1.drift(screen, pygame.transform.scale(img_sp[state], (sp_size * P1_size // player_size, sp_size * P1_size // player_size)))
             P2.draw(screen, img_player2[1 - state], face_P2[1 - state], invince_time, P2_size)
             P1.draw(screen, img_player1[state], face_P1[state], invince_time, P1_size)
         else:
-            P1.drift(screen, img_sp[state])
-            P2.drift(screen, img_sp[1 - state])
+            P1.drift(screen, pygame.transform.scale(img_sp[state], (sp_size * P1_size // player_size, sp_size * P1_size // player_size)))
+            P2.drift(screen, pygame.transform.scale(img_sp[1 - state], (sp_size * P2_size // player_size, sp_size * P2_size // player_size)))
             P1.draw(screen, img_player1[state], face_P1[state], invince_time, P1_size)
             P2.draw(screen, img_player2[1 - state], face_P2[1 - state], invince_time, P2_size)
         #--------------------------------------------------
