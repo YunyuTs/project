@@ -38,13 +38,13 @@ while running:
     # Update the display
     pygame.display.flip()
 
-    # # Check for events
-    # for event in pygame.event.get():
-    #     if event.type == pygame.QUIT:
-    #         running = False
-    #     # Check for mouse click to skip the animation
-    #     if event.type == pygame.MOUSEBUTTONDOWN and elapsed_time < animation_duration:
-    #         running = False
+    # Check for events
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        # Check for mouse click to skip the animation
+        if event.type == pygame.MOUSEBUTTONDOWN and elapsed_time < animation_duration:
+            running = False
             
     # Exit the loop if the animation duration has passed
     if elapsed_time >= animation_duration:

@@ -79,10 +79,6 @@ def start_loop():
     # 遊戲迴圈
     running = True
     while running:
-        # 事件處理
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
 
         # 更新遊戲畫面
         screen.fill(background_color)
@@ -112,14 +108,16 @@ def start_loop():
         screen.blit(teaching_text, teaching_text_rect)
         screen.blit(quit_text, quit_text_rect)
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if start_img_rect.collidepoint(mouse_pos):
-                pass
-            elif teaching_img_rect.collidepoint(mouse_pos):
-                pass
-            elif quit_img_rect.collidepoint(mouse_pos):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
                 running = False
-            #更新畫面  
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if start_img_rect.collidepoint(mouse_pos):
+                    pass
+                elif teaching_img_rect.collidepoint(mouse_pos):
+                    pass
+                elif quit_img_rect.collidepoint(mouse_pos):
+                    running = False
 
         pygame.display.flip()
         clock.tick(fps)
