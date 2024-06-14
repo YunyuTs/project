@@ -5,6 +5,7 @@ import numpy as np
 #初始化
 pygame.init()
 
+
 def finish(p1_win):
     #滑鼠顯示
     pygame.mouse.set_visible(True)
