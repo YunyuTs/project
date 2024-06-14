@@ -14,11 +14,19 @@ def main():
             repeat = 1
             continue
         elif repeat == 3:
-            finish(1)
-            break
+            if finish(1) == 0:
+                repeat = 1
+            elif finish(1) == 1:
+                repeat = 2
+            else:
+                break
         elif repeat == 4:
-            finish(0)
-            break
+            if finish(0) == 0:
+                repeat = 1
+            elif finish(0) == 1:
+                repeat = 2
+            else:
+                break
         while repeat == 1:
             repeat = game_play(choice)
         

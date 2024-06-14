@@ -2,6 +2,8 @@ import pygame
 import cv2
 import numpy as np
 def finish(p1_win):
+    #滑鼠顯示
+    pygame.mouse.set_visible(True)
     
     #初始化
     pygame.init()
@@ -89,8 +91,8 @@ def finish(p1_win):
     P1_Win = p1_win
 
     #回首頁、再來一局參數
-    home = 0
-    replay = 0
+    # home = 0
+    # replay = 0
 
     #迴圈
     run = True
@@ -105,6 +107,9 @@ def finish(p1_win):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    run = False
 
         #顯示誰贏了
         if P1_Win:
@@ -136,19 +141,22 @@ def finish(p1_win):
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             if home_img_rect.collidepoint(mouse_pos):
-                home = 1
-                return home
+                #home = 1
+                return 1
                 run = False
                 #這邊要成接回home畫面
             elif return_img_rect.collidepoint(mouse_pos):
-                replay = 1
-                return replay
+                #replay = 0
+                return 0
                 run = False
                 #這邊要改成再來一局
             elif quit_img_rect.collidepoint(mouse_pos):
+                return 2
                 run = False
                 #這邊要改成離開遊戲
         #更新畫面
         pygame.display.update()
 
-    pygame.quit()
+    #pygame.quit()
+    if __name__ == "__main__":
+        finish(1)

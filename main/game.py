@@ -101,6 +101,8 @@ def game_play(play_state):
     prop_x_max = screen_width - bg_width - thickness - prop_size // 2
     prop_y_min = bg_height + time_y + thickness + prop_size // 2
     prop_y_max = screen_height - bg_height - thickness - prop_size // 2
+    prop_x = 0
+    prop_y = 0
 
 
     #---------狀態設定---------
