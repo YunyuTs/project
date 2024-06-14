@@ -139,17 +139,11 @@ def finish(p1_win, color):
         #設定背景
         screen.fill((b_color_all[color][bg]))
         #畫邊界
-        #畫邊界
-            # pygame.draw.rect(screen, side_color[bg_choice][state], (bg_width, bg_height + time_y, screen_width - 2 * bg_width, screen_height - 2 * bg_height - time_y), thickness)
-            # pygame.draw.rect(screen, side_color[bg_choice][1 - state], (0, 0, screen_width, bg_height + time_y))
-            # pygame.draw.rect(screen, side_color[bg_choice][1 - state], (0, 0, bg_width, screen_height))
-            # pygame.draw.rect(screen, side_color[bg_choice][1 - state], (0, screen_height - bg_height, screen_width, bg_height))
-            # pygame.draw.rect(screen, side_color[bg_choice][1 - state], (screen_width - bg_width, 0, bg_width, screen_height))
         pygame.draw.rect(screen, s_color_all[color][bg], (bg_width, bg_height + time_y, screen_width - 2 * bg_width, screen_height - 2 * bg_height - time_y), thickness)
-        pygame.draw.rect(screen, s_color_all[color][1 - bg], (0, 0, screen_width, bg_height + time_y))
-        pygame.draw.rect(screen, s_color_all[color][1 - bg], (0, 0, bg_width, screen_height))
-        pygame.draw.rect(screen, s_color_all[color][1 - bg], (0, screen_height - bg_height, screen_width, bg_height))
-        pygame.draw.rect(screen, s_color_all[color][1 - bg], (screen_width - bg_width, 0, bg_width, screen_height))
+        # pygame.draw.rect(screen, s_color_all[color][1 - bg], (0, 0, screen_width, bg_height + time_y))
+        # pygame.draw.rect(screen, s_color_all[color][1 - bg], (0, 0, bg_width, screen_height))
+        # pygame.draw.rect(screen, s_color_all[color][1 - bg], (0, screen_height - bg_height, screen_width, bg_height))
+        # pygame.draw.rect(screen, s_color_all[color][1 - bg], (screen_width - bg_width, 0, bg_width, screen_height))
 
         
         #透視視窗
