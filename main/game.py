@@ -50,10 +50,10 @@ attack_volume = 0.3
 
 #效果
 effects = 4
-st_rate = [1, 1] #換場率
-adsp_rate = [2, 2] #衝刺率
-size_rate = [3, 3] #大小率
-hp_rate = [4, 4] #加生命值率
+st_rate = [1, 1] #換場率 1/4
+adsp_rate = [2, 2] #衝刺率 1/4
+size_rate = [3, 3] #大小率 1/4
+hp_rate = [4, 4] #加生命值率 1/4
 
 #道具效果
 or_max_speed = 8 #原始最大速度
