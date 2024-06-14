@@ -38,6 +38,14 @@ def finish(p1_win):
     return_img = cv2.imread('src/images/return.png')
     quit_img = cv2.imread('src/images/Quit.png')
 
+    #改灰階
+    Bh, Gh, Rh = cv2.split(home_img)
+    home_img = cv2.merge([Bh, Bh, Bh])
+    Br, Gr, Rr = cv2.split(return_img)
+    return_img = cv2.merge([Br, Br, Br])
+    Bq, Gq, Rq = cv2.split(quit_img)
+    quit_img = cv2.merge([Bq, Bq, Bq])
+
     # Create copies of the original images
     modified_home_img = np.copy(home_img)
     modified_return_img = np.copy(return_img)
@@ -151,11 +159,11 @@ def finish(p1_win):
                 #這邊要成接回home畫面
             elif return_img_rect.collidepoint(mouse_pos):
                 #replay = 0
-                return 0
+                return 2
                 run = False
                 #這邊要改成再來一局
             elif quit_img_rect.collidepoint(mouse_pos):
-                return 2
+                return 0
                 run = False
                 #這邊要改成離開遊戲
         #更新畫面
