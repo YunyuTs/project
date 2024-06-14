@@ -5,7 +5,7 @@ import random
 import time
 from player import player
 from pause_game import pause_game
-from finish import finish
+from coun_down import count_down
 
 #初始化
 pygame.init()
@@ -58,7 +58,7 @@ hp_rate = [4, 4] #加生命值率 1/4
 #道具效果
 or_max_speed = 8 #原始最大速度
 or_min_speed = 3 #原始最小速度
-pr_max_adsp = 20 #最大速度
+pr_max_adsp = 15 #最大速度
 pr_min_adsp = 7 #最小速度
 adsp_time = 500 #衝次時間
 pr_size = 2 #大小
@@ -108,7 +108,7 @@ def game_play(play_state):
 
     #---------狀態設定---------
     t = 0 #時間
-    state = 1 #0:攻擊 1:防禦
+    state = 0 #0:攻擊 1:防禦
     state_flag = 0 #狀態轉換
     flag = [0, 0] #0:未按下 1:按下
     song_flag = 0 #轉換音樂
@@ -122,6 +122,8 @@ def game_play(play_state):
     prop_effect = -1 #道具效果
     pr_adsp = 0 #道具衝刺時間
     pr_size_time = 0 #道具大小時間
+    cd = 3 #倒數時間
+    count = 0 #倒數
     #--------------------------------
 
 
@@ -365,6 +367,86 @@ def game_play(play_state):
     run = True
     while run:
 
+    
+
+        
+        #---------基礎設定---------
+        #時間揁數
+        clock.tick(fps)
+        #更新畫面
+        pygame.display.flip()
+        screen.fill(bg_color[state])
+
+        #繪製玩家
+        if state == 0:
+            P2.drift(screen, pygame.transform.scale(img_sp[1 - state], (sp_size * P2_size // player_size, sp_size * P2_size // player_size)))
+            P1.drift(screen, pygame.transform.scale(img_sp[state], (sp_size * P1_size // player_size, sp_size * P1_size // player_size)))
+            P2.draw(screen, img_player2[1 - state], face_P2[1 - state], invince_time, P2_size)
+            P1.draw(screen, img_player1[state], face_P1[state], invince_time, P1_size)
+        else:
+            P1.drift(screen, pygame.transform.scale(img_sp[state], (sp_size * P1_size // player_size, sp_size * P1_size // player_size)))
+            P2.drift(screen, pygame.transform.scale(img_sp[1 - state], (sp_size * P2_size // player_size, sp_size * P2_size // player_size)))
+            P1.draw(screen, img_player1[state], face_P1[state], invince_time, P1_size)
+            P2.draw(screen, img_player2[1 - state], face_P2[1 - state], invince_time, P2_size)
+        #--------------------------------------------------
+
+
+        #------------draw border--------
+        pygame.draw.rect(screen, side_color[state], (bg_width, bg_height + time_y, screen_width - 2 * bg_width, screen_height - 2 * bg_height - time_y), thickness)
+        pygame.draw.rect(screen, side_color[1 - state], (0, 0, screen_width, bg_height + time_y))
+        pygame.draw.rect(screen, side_color[1 - state], (0, 0, bg_width, screen_height))
+        pygame.draw.rect(screen, side_color[1 - state], (0, screen_height - bg_height, screen_width, bg_height))
+        pygame.draw.rect(screen, side_color[1 - state], (screen_width - bg_width, 0, bg_width, screen_height))
+        #--------------------------------
+        
+        
+        #------------draw life--------
+        p1_pos = (bg_width - player_size - tweak, screen_height - player_size - tweak)
+        screen.blit(img_player1[state], p1_pos)
+        screen.blit(face_P1[state], p1_pos)
+        for i in range(P1.life):
+            screen.blit(Life[state], (p1_pos[0] + (player_size - heart_size) / 2, p1_pos[1] - heart_size * (i + 1)))
+        
+        p2_pos = (screen_width - bg_width + tweak, screen_height - player_size - tweak)
+        screen.blit(img_player2[1 - state], p2_pos)
+        screen.blit(face_P2[1 - state], p2_pos)
+        for i in range(P2.life):
+            screen.blit(Life[1 - state], (p2_pos[0] + (player_size - heart_size) / 2, p1_pos[1] - heart_size * (i + 1)))
+        #--------------------------------
+
+
+        #------繪製名字-------
+        p1_text = font.render("P1", True, bg_color[1 - state])
+        p2_text = font.render("P2", True, bg_color[1 - state])
+        if state == 0:
+            screen.blit(p2_text, (P2.x - (player_size // 5), P2.y - P2_size // 2 - text_distance))
+            #screen.blit(p1_text, (P1.x - (P1_size / 5), P1.y - P1_size))
+            screen.blit(p1_text, (P1.x - (player_size // 5), P1.y - P1_size // 2 - text_distance))
+        else:
+            screen.blit(p1_text, (P1.x - (player_size // 5), P1.y - P1_size // 2 - text_distance))
+            screen.blit(p2_text, (P2.x - (player_size // 5), P2.y - P2_size // 2 - text_distance))
+        #--------------------------------
+
+        #------繪製時間軸-------
+        if state == 0:
+            pygame.draw.rect(screen, bg_color[1 - state], [(screen_width - time_width) / 2, time_y, time_width * t / len, time_height], 0)
+            pygame.draw.rect(screen, bg_color[1 - state], [(screen_width - time_width) / 2, time_y, time_width, time_height], int(time_height / 5))
+            pygame.draw.circle(screen, bg_color[state], ((screen_width - time_width) / 2 + time_width * t / len, time_y + time_height / 2), time_height)
+            pygame.draw.circle(screen, bg_color[1 - state], ((screen_width - time_width) / 2 + time_width * t / len, time_y + time_height / 2), time_height, int(time_height / 5))
+        else:
+            pygame.draw.rect(screen, bg_color[1 - state], [(screen_width - time_width) / 2, time_y, time_width * (1 - t / len), time_height], 0)
+            pygame.draw.rect(screen, bg_color[1 - state], [(screen_width - time_width) / 2, time_y, time_width, time_height], int(time_height / 5))
+            pygame.draw.circle(screen, bg_color[state], ((screen_width - time_width) / 2 + time_width * (1 - t / len), time_y + time_height / 2), time_height)
+            pygame.draw.circle(screen, bg_color[1 - state], ((screen_width - time_width) / 2 + time_width * (1 - t / len), time_y + time_height / 2), time_height, int(time_height / 5))
+        #--------------------------------
+
+        if cd >= 0:
+            count = count_down(cd, color, volume, count)
+            if count == 60:
+                cd -= 1
+                count = 0
+            continue
+
         #event handler
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -418,7 +500,10 @@ def game_play(play_state):
                     #pygame.mixer.music.stop()
                     t = 0
                     change.play()
-                    state = 1 - state
+                    if not cd == -1:
+                        state = 1 - state
+                    else:
+                        cd -= 1
                     P1.state = state
                     P2.state = 1 - state    
                     pygame.mixer.music.load(song[state])
@@ -431,13 +516,6 @@ def game_play(play_state):
                     prop_y = random.randint(prop_y_min, prop_y_max) #道具位置 中心
         #--------------------------------
 
-        
-        #---------基礎設定---------
-        #時間揁數
-        clock.tick(fps)
-        #更新畫面
-        pygame.display.flip()
-        screen.fill(bg_color[state])
 
 
         #---------道具生成---------
@@ -591,68 +669,6 @@ def game_play(play_state):
             P2.y = bg_height + time_y + P2_size / 2
 
 
-        #繪製玩家
-        if state == 0:
-            P2.drift(screen, pygame.transform.scale(img_sp[1 - state], (sp_size * P2_size // player_size, sp_size * P2_size // player_size)))
-            P1.drift(screen, pygame.transform.scale(img_sp[state], (sp_size * P1_size // player_size, sp_size * P1_size // player_size)))
-            P2.draw(screen, img_player2[1 - state], face_P2[1 - state], invince_time, P2_size)
-            P1.draw(screen, img_player1[state], face_P1[state], invince_time, P1_size)
-        else:
-            P1.drift(screen, pygame.transform.scale(img_sp[state], (sp_size * P1_size // player_size, sp_size * P1_size // player_size)))
-            P2.drift(screen, pygame.transform.scale(img_sp[1 - state], (sp_size * P2_size // player_size, sp_size * P2_size // player_size)))
-            P1.draw(screen, img_player1[state], face_P1[state], invince_time, P1_size)
-            P2.draw(screen, img_player2[1 - state], face_P2[1 - state], invince_time, P2_size)
-        #--------------------------------------------------
-
-
-        #------------draw border--------
-        pygame.draw.rect(screen, side_color[state], (bg_width, bg_height + time_y, screen_width - 2 * bg_width, screen_height - 2 * bg_height - time_y), thickness)
-        pygame.draw.rect(screen, side_color[1 - state], (0, 0, screen_width, bg_height + time_y))
-        pygame.draw.rect(screen, side_color[1 - state], (0, 0, bg_width, screen_height))
-        pygame.draw.rect(screen, side_color[1 - state], (0, screen_height - bg_height, screen_width, bg_height))
-        pygame.draw.rect(screen, side_color[1 - state], (screen_width - bg_width, 0, bg_width, screen_height))
-        #--------------------------------
-        
-        
-        #------------draw life--------
-        p1_pos = (bg_width - player_size - tweak, screen_height - player_size - tweak)
-        screen.blit(img_player1[state], p1_pos)
-        screen.blit(face_P1[state], p1_pos)
-        for i in range(P1.life):
-            screen.blit(Life[state], (p1_pos[0] + (player_size - heart_size) / 2, p1_pos[1] - heart_size * (i + 1)))
-        
-        p2_pos = (screen_width - bg_width + tweak, screen_height - player_size - tweak)
-        screen.blit(img_player2[1 - state], p2_pos)
-        screen.blit(face_P2[1 - state], p2_pos)
-        for i in range(P2.life):
-            screen.blit(Life[1 - state], (p2_pos[0] + (player_size - heart_size) / 2, p1_pos[1] - heart_size * (i + 1)))
-        #--------------------------------
-
-
-        #------繪製名字-------
-        p1_text = font.render("P1", True, bg_color[1 - state])
-        p2_text = font.render("P2", True, bg_color[1 - state])
-        if state == 0:
-            screen.blit(p2_text, (P2.x - (player_size // 5), P2.y - P2_size // 2 - text_distance))
-            #screen.blit(p1_text, (P1.x - (P1_size / 5), P1.y - P1_size))
-            screen.blit(p1_text, (P1.x - (player_size // 5), P1.y - P1_size // 2 - text_distance))
-        else:
-            screen.blit(p1_text, (P1.x - (player_size // 5), P1.y - P1_size // 2 - text_distance))
-            screen.blit(p2_text, (P2.x - (player_size // 5), P2.y - P2_size // 2 - text_distance))
-        #--------------------------------
-
-        #------繪製時間軸-------
-        if state == 0:
-            pygame.draw.rect(screen, bg_color[1 - state], [(screen_width - time_width) / 2, time_y, time_width * t / len, time_height], 0)
-            pygame.draw.rect(screen, bg_color[1 - state], [(screen_width - time_width) / 2, time_y, time_width, time_height], int(time_height / 5))
-            pygame.draw.circle(screen, bg_color[state], ((screen_width - time_width) / 2 + time_width * t / len, time_y + time_height / 2), time_height)
-            pygame.draw.circle(screen, bg_color[1 - state], ((screen_width - time_width) / 2 + time_width * t / len, time_y + time_height / 2), time_height, int(time_height / 5))
-        else:
-            pygame.draw.rect(screen, bg_color[1 - state], [(screen_width - time_width) / 2, time_y, time_width * (1 - t / len), time_height], 0)
-            pygame.draw.rect(screen, bg_color[1 - state], [(screen_width - time_width) / 2, time_y, time_width, time_height], int(time_height / 5))
-            pygame.draw.circle(screen, bg_color[state], ((screen_width - time_width) / 2 + time_width * (1 - t / len), time_y + time_height / 2), time_height)
-            pygame.draw.circle(screen, bg_color[1 - state], ((screen_width - time_width) / 2 + time_width * (1 - t / len), time_y + time_height / 2), time_height, int(time_height / 5))
-        #--------------------------------
 
 
         #更新時間

@@ -147,10 +147,7 @@ def finish(p1_win, color):
 
         
         #透視視窗
-        if bg == 0:
-            window.set_alpha(80)
-        else:
-            window.set_alpha(100)
+        window.set_alpha(80)
         screen.blit(window, (0, 0))
 
 
