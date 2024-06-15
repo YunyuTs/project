@@ -19,6 +19,7 @@ clock = pygame.time.Clock()
 # 設定背景顏色
 background_color = (70, 20, 80)
 
+
 # 設定遊戲標題圖片
 title_img = pygame.image.load("src/images/Tag.png")
 title_img = pygame.transform.scale(title_img, (720, 430))
@@ -95,6 +96,11 @@ def teaching():
 
 
 def start_loop():
+    #背景音樂
+    pygame.mixer.init()
+    pygame.mixer.music.load("src/sound/opening_sound//Sinya_no_hotcocoa.mpga")
+    pygame.mixer.music.play(-1, start=5.0)
+
     # 遊戲迴圈
     running = True
     while running:
