@@ -125,7 +125,7 @@ class player():
         if self.state == 0:
             blitRotate(screen, img_tmp, self.getpos(), (size / 2, size / 2), self.ang)
             blitRotate(screen, face_tmp, self.getpos(), (size / 2, size / 2), self.ang)
-        if (invince_time % 50 < 25 or invince_time <= 0):
+        elif (invince_time % 50 < 25 or invince_time <= 0):
             blitRotate(screen, img_tmp, self.getpos(), (size / 2, size / 2), self.ang)
             blitRotate(screen, face_tmp, self.getpos(), (size / 2, size / 2), self.ang)
 

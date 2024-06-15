@@ -26,9 +26,11 @@ cd_go = pygame.mixer.Sound("src/sound/cd1.wav")
 #time rate
 max_size = 120
 min_size = 80
-time_rate = 60
+time_rate = 80
 
 def count_down(n, color, volume, count):
+
+    #screen.fill(black)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -66,7 +68,7 @@ def count_down(n, color, volume, count):
         pygame.display.flip()
                 
         # Wait for the given time
-        time.sleep(1 / time_rate)
+        time.sleep(0.25 / time_rate)
 
     else:
         # Play the "GO!" sound
@@ -91,7 +93,7 @@ def count_down(n, color, volume, count):
         pygame.display.flip()
 
         # Wait for the given time
-        time.sleep(1 / (time_rate * 2))
+        time.sleep(0.25 / (time_rate * 2))
         
     if n == 0 and count + 1 ==time_rate:
         time.sleep(30 / time_rate)
@@ -104,6 +106,6 @@ b = 0
 if __name__ == "__main__":
     while a >= 0:
         b = count_down(a, 0, 1, b)
-        if b == 60:
+        if b == 80:
             a -= 1
             b = 0
