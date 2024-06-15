@@ -543,20 +543,21 @@ def game_play(play_state):
                 if song_flag == 0:
                     #pygame.mixer.music.stop()
                     t = 0
-                    change.play()
                     pygame.mixer.music.load(song[state])
-                    pygame.mixer.music.play()
                     prop_touch = 0
                     prop_effect = -1
                     song_flag = 1
                     pause_times = 0
                     if not cd == -1:
+                        change.play()
+                        pygame.mixer.music.play()
                         state = 1 - state
                         #當隨機出現的道具位置與玩家位置重疊時，重新生成道具位置 直到不重疊
                         while (abs(P1.x - prop_x) < (P1_size + prop_size) // 2 and abs(P1.y - prop_y) < (P1_size + prop_size) // 2) or (abs(P2.x - prop_x) < (P2_size + prop_size) // 2 and abs(P2.y - prop_y) < (P2_size + prop_size) // 2) or prop_x == 0 or prop_y == 0:
                             prop_x = random.randint(prop_x_min, prop_x_max) #道具位置 中心
                             prop_y = random.randint(prop_y_min, prop_y_max) #道具位置 中心
                     else:
+                        pygame.mixer.music.play(fade_ms=1000)
                         cd -= 1
                         prop_touch = 3
                     P1.state = state
@@ -691,7 +692,7 @@ if __name__ == '__main__':
     repeat = 1
     while repeat:
         repeat = 0
-        repeat = game_play((1, 0, 3))
+        repeat = game_play((3, 0, 3))
         if repeat == 3:
             print("P1 win")
         elif repeat == 4:
