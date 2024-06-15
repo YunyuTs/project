@@ -9,7 +9,7 @@ pygame.init()
 screen_width = 1280
 screen_height = 720
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("YUYU大作戰")
+pygame.display.set_caption("Tag you're it!")
 width = 500  # 按鈕置中
 
 # 設定遊戲幀率
@@ -17,16 +17,16 @@ fps = 60
 clock = pygame.time.Clock()
 
 # 設定背景顏色
-background_color = (70, 10, 80)
+background_color = (70, 20, 80)
 
 # 設定遊戲標題圖片
-title_img = pygame.image.load("src/images/Dora.png")
-title_img = pygame.transform.scale(title_img, (500, 200))
+title_img = pygame.image.load("src/images/Tag.png")
+title_img = pygame.transform.scale(title_img, (720, 430))
 title_img_rect = title_img.get_rect()
-title_img_rect.center = (screen_width // 2, 180)
+title_img_rect.center = (700, 200)
 
 # 設定教學圖片
-teach_img = pygame.image.load("src/images/teaching.JPG")
+teach_img = pygame.image.load("src/images/teaching.jpg")
 teach_img = pygame.transform.scale(teach_img, (1284, 720))
 teach_img_rect = teach_img.get_rect()
 teach_img_rect.center = (screen_width // 2, screen_height // 2)
@@ -81,9 +81,9 @@ def teaching():
         screen.fill(background_color)
         screen.blit(teach_img, teach_img_rect)
         font = pygame.font.Font(None, 50)
-        click_text = font.render("Click anywhere to return home", True, (255, 255, 255))
+        click_text = font.render("\"Click anywhere to return home\"", True, (255, 255, 255))
         click_text_rect = click_text.get_rect()
-        click_text_rect.center = (screen_width // 2, 200)
+        click_text_rect.center = (screen_width // 2, 180)
         screen.blit(click_text, click_text_rect)
         pygame.display.flip()
         for event in pygame.event.get():
