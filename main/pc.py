@@ -628,13 +628,13 @@ def pc_game(play_state):
         else:
             flag[0] = 0
         
-        if key[pygame.K_COMMA]: #",":衝刺
-            if flag[1] == 0:
-                if P2.sprint_time <= 0:
-                    P2.setdrift()
-                flag[1] = 1
-        else:
-            flag[1] = 0
+        # if key[pygame.K_COMMA]: #",":衝刺
+        #     if flag[1] == 0:
+        #         if P2.sprint_time <= 0:
+        #             P2.setdrift()
+        #         flag[1] = 1
+        # else:
+        #     flag[1] = 0
 
         #--------------------------------------------------
 
