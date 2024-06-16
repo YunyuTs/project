@@ -60,8 +60,8 @@ hp_rate = [4, 4] #加生命值率 1/4
 #道具效果
 or_max_speed = 8 #原始最大速度
 or_min_speed = 3 #原始最小速度
-pr_max_adsp = 15 #最大速度
-pr_min_adsp = 7 #最小速度
+pr_max_adsp = 12 #最大速度
+pr_min_adsp = 5 #最小速度
 adsp_time = 500 #衝次時間
 pr_size = 2 #大小
 size_time = 500 #大小變化時間
