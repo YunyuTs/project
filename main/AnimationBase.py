@@ -16,23 +16,6 @@ red = (255, 0, 0)
 class AnimationBase(pygame.sprite.Sprite):
 	#物件 建構函數
 	def __init__(self, x, y, images=None, image_size=(100,100)):
-		'''
-		輸入參數
-		----------
-		x : 數值
-			圖像水平位置
-		y : 數值
-			圖像垂直位置
-		playRepeatCount : 整數, optional
-			同一畫框重複播放數. 預設值為5.
-		images : 圖像或圖像串列, optional
-			動畫之圖像. 預設值為 None(無).
-
-		回傳值
-		-------
-		無
-
-		'''
 		
 		#呼叫 父類別建構函數
 		pygame.sprite.Sprite.__init__(self)
