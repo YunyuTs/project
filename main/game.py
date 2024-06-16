@@ -708,7 +708,7 @@ if __name__ == '__main__':
     repeat = 1
     while repeat:
         repeat = 0
-        repeat = game_play((3, 0, 3))
+        repeat = game_play((0, 0, 3))
         if repeat == 3:
             print("P1 win")
         elif repeat == 4:

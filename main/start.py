@@ -16,9 +16,16 @@ width = 500  # 按鈕置中
 fps = 60
 clock = pygame.time.Clock()
 
-# 設定背景顏色
-background_color = (70, 20, 80)
+# 設定背景
+background = pygame.image.load("src/images/background.png")
+background = pygame.transform.scale(background, (screen_width * 2, screen_height))
+x = 0
+speed = 0.5
 
+#透明視窗
+window = pygame.Surface((screen_width, screen_height))
+window.set_alpha(150)
+window.fill((0, 0, 0))
 
 # 設定遊戲標題圖片
 title_img = pygame.image.load("src/images/Tag.png")
@@ -78,8 +85,8 @@ quit_text_rect = quit_text.get_rect()
 quit_text_rect.center = quit_img_rect.center
 
 def teaching():
+    global x
     while True:
-        screen.fill(background_color)
         screen.blit(teach_img, teach_img_rect)
         font = pygame.font.Font(None, 50)
         click_text = font.render("\"Click anywhere to return home\"", True, (255, 255, 255))
@@ -100,13 +107,18 @@ def start_loop():
     pygame.mixer.init()
     pygame.mixer.music.load("src/sound/opening_sound//Sinya_no_hotcocoa.mpga")
     pygame.mixer.music.play(-1, start=5.0)
+    global x
 
     # 遊戲迴圈
     running = True
     while running:
         
         # 更新遊戲畫面
-        screen.fill(background_color)
+        #繪製背景
+        screen.blit(background.subsurface(x % screen_width, 0, screen_width, screen_height),(0,0))
+        x += speed
+        #繪製透明視窗
+        screen.blit(window, (0, 0))
         screen.blit(title_img, title_img_rect)
 
         # 檢測鼠標懸停事件
