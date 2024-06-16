@@ -3,6 +3,8 @@ from game import game_play
 from choose_character import choose_color
 from finish import finish
 from open_anime import start_page
+from choose_pc import choose_pc
+from pc import pc_game
 
 #設定標題
 pygame.display.set_caption("Tag you're it!")
@@ -37,7 +39,10 @@ def main():
             break
 
         while repeat == 1:
-            repeat = game_play(choice)
+            if start == 1:
+                repeat = game_play(choice)
+            elif start == 2:
+                repeat = pc_game(choice)
         
 
 

@@ -167,6 +167,67 @@ class player():
             self.ang += 360
         elif self.ang > tmp:
             self.ang -= 360
+    #--------------------------------------------------------------
+
+    def PC_move(self, p1_x, p1_y, border_x, border_y, p1_size, p2_size):#PC移動
+        dist_x = 0
+        dist_y = 0
+        if self.state == 0:
+            dist_x_1 = self.x - p1_x
+            dist_y_1 = self.y - p1_y
+            if self.x < p1_x:
+                dist_x_2 = self.x - border_x[0] - p2_size / 2 + border_x[1] - p1_x + p1_size / 2
+            else:
+                dist_x_2 = p1_x - border_x[0] - p1_size / 2 + border_x[1] - self.x + p2_size / 2
+            if self.y < p1_y:
+                dist_y_2 = self.y - border_y[0] - p2_size / 2 + border_y[1] - p1_y + p1_size / 2
+            else:
+                dist_y_2 = p1_y - border_y[0] - p1_size / 2 + border_y[1] - self.y + p2_size / 2
+
+            if abs(dist_x_1) < abs(dist_x_2):
+                dist_x = dist_x_1
+            else:
+                dist_x = dist_x_2
+            if abs(dist_y_1) < abs(dist_y_2):
+                dist_y = dist_y_1
+            else:
+                dist_y = dist_y_2
+            self.ang = math.degrees(math.atan2(dist_x, dist_y))
+
+            if self.x != p1_x or self.y != p1_y:
+                self.move()
+        else:
+            x = p1_x - (border_x[1] - border_x[0]) / 2
+            if x < border_x[0] + p2_size / 2:
+                x = p1_x + (border_x[1] - border_x[0]) / 2
+            y = p1_y - (border_y[1] - border_y[0]) / 2
+            if y < border_y[0] + p2_size / 2:
+                y = p1_y + (border_y[1] - border_y[0]) / 2
+
+            dist_x_1 = self.x - x
+            dist_y_1 = self.y - y
+            if self.x < x:
+                dist_x_2 = self.x - border_x[0] - p2_size / 2 + border_x[1] - x + p1_size / 2
+            else:
+                dist_x_2 = x - border_x[0] - p1_size / 2 + border_x[1] - self.x + p2_size / 2
+            if self.y < y:
+                dist_y_2 = self.y - border_y[0] - p2_size / 2 + border_y[1] - y + p1_size / 2
+            else:
+                dist_y_2 = y - border_y[0] - p1_size / 2 + border_y[1] - self.y + p2_size / 2
+            
+            if abs(dist_x_1) < abs(dist_x_2):
+                dist_x = dist_x_1
+            else:
+                dist_x = dist_x_2
+            if abs(dist_y_1) < abs(dist_y_2):
+                dist_y = dist_y_1
+            else:
+                dist_y = dist_y_2
+            self.ang = math.degrees(math.atan2(dist_x, dist_y))
+
+            if self.x != x or self.y != y:
+                self.move()
+        
 
 #--------------------------------------------------------------
  

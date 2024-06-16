@@ -167,15 +167,6 @@ class player():
             self.ang += 360
         elif self.ang > tmp:
             self.ang -= 360
-    #--------------------------------------------------------------
-
-    def PC_move(self, p1_x, p1_y): #電腦移動
-        if self.state == 0:
-            self.ang = -math.degrees(math.atan2(p1_x - self.x, p1_y - self.y))
-            self.move()
-        else:
-            self.ang = math.degrees(math.atan2(p1_x - self.x, p1_y - self.y))
-            self.move()
 
 #--------------------------------------------------------------
  

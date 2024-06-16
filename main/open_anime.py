@@ -1,6 +1,7 @@
 import pygame
 import time
 from start import start_loop, screen, screen_width, screen_height
+from choose_pc import choose_pc
 
 # Load the logo images
 logo1_image = pygame.image.load("src/images/yuyu.png")
@@ -76,7 +77,15 @@ def start_page():
                 running = False
 
     # Start the main menu loop
-    return start_loop()
+    start = start_loop()
+    if start == 0:
+        return 0
+    choice = choose_pc()
+    if choice == "pvp":
+        return 1
+    elif choice == "pve":
+        return 2
+
 
 if __name__ == "__main__":
     print(start_page())

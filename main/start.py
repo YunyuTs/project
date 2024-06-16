@@ -164,6 +164,6 @@ def start_loop():
         clock.tick(fps)
 
 if __name__ == "__main__":
-    print(start_loop())
+    a = start_loop()
 
 

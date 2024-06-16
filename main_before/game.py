@@ -573,7 +573,7 @@ def game_play(play_state):
                         cd -= 1
                         prop_touch = 3
                     P1.state = state
-                    P2.state = 1 - state     
+                    P2.state = 1 - state    
         #--------------------------------
 
 
@@ -672,7 +672,7 @@ def game_play(play_state):
 
         #玩家移動
         P1.turn_move(key, pygame.K_a, pygame.K_w, pygame.K_s, pygame.K_d)
-        P2.PC_move(P1.x, P1.y)
+        P2.turn_move(key, pygame.K_LEFT, pygame.K_UP, pygame.K_DOWN, pygame.K_RIGHT)
         #P1碰撞邊界
         if P1.x - P1_size / 2 < bg_width:
             P1.x = screen_width - bg_width - P1_size / 2
@@ -710,7 +710,7 @@ if __name__ == '__main__':
     repeat = 1
     while repeat:
         repeat = 0
-        repeat = game_play((3, 0, 3))
+        repeat = game_play((0, 0, 3))
         if repeat == 3:
             print("P1 win")
         elif repeat == 4:
