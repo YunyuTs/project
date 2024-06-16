@@ -17,9 +17,8 @@ fps = 60
 clock = pygame.time.Clock()
 
 # 設定背景
-# background = pygame.image.load("src/images/background.png")
-# background = pygame.transform.scale(background, (screen_width * 2, screen_height))
-background = pygame.image.load("src/images/back.png")
+background = pygame.image.load("src/images/background.png")
+background = pygame.transform.scale(background, (screen_width * 2, screen_height))
 x = 0
 speed = 0.5
 
@@ -116,9 +115,9 @@ def start_loop():
         
         # 更新遊戲畫面
         #繪製背景
-        screen.blit(background, (-x, 0))
+        screen.blit(background.subsurface(x, 0, screen_width, screen_height), (0, 0))
         x += speed
-        if x >= screen_width * 2: x = 0
+        if x >= screen_width: x = 0
         #繪製透明視窗
         screen.blit(window, (0, 0))
         screen.blit(title_img, title_img_rect)

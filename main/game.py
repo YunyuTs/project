@@ -549,6 +549,8 @@ def game_play(play_state):
                 if song_flag == 0:
                     #pygame.mixer.music.stop()
                     t = 0
+                    if not cd == -1:
+                        state = 1 - state
                     pygame.mixer.music.load(song[state])
                     prop_effect = -1
                     song_flag = 1
@@ -556,16 +558,16 @@ def game_play(play_state):
                     if not cd == -1:
                         change.play()
                         pygame.mixer.music.play()
-                        state = 1 - state
                         #當隨機出現的道具位置與玩家位置重疊時，重新生成道具位置 直到不重疊
-                        prop_x_tmp = prop_x
-                        prop_y_tmp = prop_y
-                        while (abs(P1.x - prop_x) < (P1_size + prop_size) // 2 and abs(P1.y - prop_y) < (P1_size + prop_size) // 2) or (abs(P2.x - prop_x) < (P2_size + prop_size) // 2 and abs(P2.y - prop_y) < (P2_size + prop_size) // 2) or prop_x == 0 or prop_y == 0 or (prop_x == prop_x_tmp and prop_y == prop_y_tmp):
-                            prop_x = random.randint(prop_x_min, prop_x_max) #道具位置 中心
-                            prop_y = random.randint(prop_y_min, prop_y_max) #道具位置 中心
-                        prop_img = AnimationBase(prop_x, prop_y, images=imgs_prop, image_size=(prop_size, prop_size))
-                        allGroup.add(prop_img)
-                    prop_touch = 0
+                        if prop_touch != 0:
+                            prop_x_tmp = prop_x
+                            prop_y_tmp = prop_y
+                            while (abs(P1.x - prop_x) < (P1_size + prop_size) // 2 and abs(P1.y - prop_y) < (P1_size + prop_size) // 2) or (abs(P2.x - prop_x) < (P2_size + prop_size) // 2 and abs(P2.y - prop_y) < (P2_size + prop_size) // 2) or prop_x == 0 or prop_y == 0 or (prop_x == prop_x_tmp and prop_y == prop_y_tmp):
+                                prop_x = random.randint(prop_x_min, prop_x_max) #道具位置 中心
+                                prop_y = random.randint(prop_y_min, prop_y_max) #道具位置 中心
+                            prop_img = AnimationBase(prop_x, prop_y, images=imgs_prop, image_size=(prop_size, prop_size))
+                            allGroup.add(prop_img)
+                            prop_touch = 0
                     if cd == -1:
                         pygame.mixer.music.play(fade_ms=1000)
                         cd -= 1
