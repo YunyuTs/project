@@ -135,13 +135,16 @@ def start_loop():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                return 0
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if start_img_rect.collidepoint(mouse_pos):
                     return "YUYU"
                 elif teaching_img_rect.collidepoint(mouse_pos):
                     teaching()
                 elif quit_img_rect.collidepoint(mouse_pos):
+                    return 0
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
                     return 0
 
         pygame.display.flip()

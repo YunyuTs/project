@@ -149,9 +149,9 @@ def choose_color():
     last_click_time = 0
 
     #music
-    music = pygame.mixer.music.load('src/sound/background.ogg')
-    pygame.mixer.music.set_volume(0.5)
-    pygame.mixer.music.play(-1)
+    # music = pygame.mixer.music.load('src/sound/background.ogg')
+    # pygame.mixer.music.set_volume(0.5)
+    # pygame.mixer.music.play(-1)
 
     run = True
     while run:

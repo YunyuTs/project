@@ -5,7 +5,7 @@ from finish import finish
 from open_anime import start_page
 
 #設定標題
-pygame.display.set_caption("Poko")
+pygame.display.set_caption("Tag you're it!")
 
 #音樂
 pygame.mixer.init()

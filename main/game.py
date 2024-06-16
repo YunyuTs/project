@@ -6,6 +6,8 @@ import time
 from player import player
 from pause_game import pause_game
 from coun_down import count_down
+import readAnimationFile
+from AnimationBase import AnimationBase
 
 #初始化
 pygame.init()
@@ -62,7 +64,7 @@ pr_max_adsp = 15 #最大速度
 pr_min_adsp = 7 #最小速度
 adsp_time = 500 #衝次時間
 pr_size = 2 #大小
-size_time = 1000 #大小變化時間
+size_time = 500 #大小變化時間
 max_life = 8 #最大生命值
 
 #主程式
@@ -97,14 +99,16 @@ def game_play(play_state):
     #--------------------------------
 
     #---------道具設定---------
-    prop_size = 50 #道具大小
+    prop_size = 48 #道具大小
     prop_x_min = bg_width + thickness + prop_size // 2
     prop_x_max = screen_width - bg_width - thickness - prop_size // 2
     prop_y_min = bg_height + time_y + thickness + prop_size // 2
     prop_y_max = screen_height - bg_height - thickness - prop_size // 2
     prop_x = 0
     prop_y = 0
-
+    imgs_prop = readAnimationFile.getImagesFromDirectory("src", "images/prop/", 11)
+    #建立群組
+    allGroup = pygame.sprite.Group()
 
     #---------狀態設定---------
     t = 0 #時間
@@ -119,6 +123,7 @@ def game_play(play_state):
     debounce_time = 0.3 #去抖時間
     last_key_press_time = {} #最後按下時間
     prop_touch = 0 #道具碰撞
+    prop_touch_tmp = 0 #道具碰撞暫存
     prop_effect = -1 #道具效果
     pr_adsp = 0 #道具衝刺時間
     pr_size_time = 0 #道具大小時間
@@ -371,32 +376,30 @@ def game_play(play_state):
         #時間揁數
         clock.tick(fps)
         #更新畫面
-        pygame.display.flip()
         screen.fill(bg_color[state])
 
         #---------換場效果---------
-        if st_rate[0] <= prop_effect <= st_rate[1]:
-            t = 0
-            pygame.mixer.music.stop()
+        for i in range(2):
+            if st_rate[0] <= prop_effect <= st_rate[1]:
+                t = 0
+                pygame.mixer.music.stop()
         
         if pr_adsp > 0:
             pr_adsp -= 1
-            if prop_touch == 1:
-                circle_surface = pygame.Surface((P1_size * 3 // 2, P1_size * 3 // 2), pygame.SRCALPHA)
-                pygame.draw.circle(circle_surface, bg_color[state], (P1_size * 3 // 4, P1_size * 3 // 4), P1_size * 3 // 4)
+            if prop_adsp_tmp == 1:
+                circle_surface = pygame.Surface((P1_size * 3 // 2, P1_size * 3 // 2))
+                pygame.draw.circle(circle_surface, bg_color[1 - state], (P1_size * 3 // 4, P1_size * 3 // 4), P1_size * 3 // 4)
+                circle_surface.set_alpha(128)
+                circle_surface.set_colorkey((0, 0, 0))
                 screen.blit(circle_surface, (P1.x - P1_size * 3 // 4, P1.y - P1_size * 3 // 4))
-                circle_surface = pygame.Surface((P1_size * 5 // 4, P1_size * 5 // 4), pygame.SRCALPHA)
-                pygame.draw.circle(circle_surface, bg_color[1 - state], (P1_size * 5 // 8, P1_size * 5 // 8), P1_size * 5 // 8)
-                screen.blit(circle_surface, (P1.x - P1_size * 5 // 8, P1.y - P1_size * 5 // 8))
                 P1.max_speed = pr_max_adsp
                 P1.min_speed = pr_min_adsp
-            elif prop_touch == 2:
-                circle_surface = pygame.Surface((P2_size * 3 // 2, P2_size * 3 // 2), pygame.SRCALPHA)
-                pygame.draw.circle(circle_surface, bg_color[state], (P2_size * 3 // 4, P2_size * 3 // 4), P2_size * 3 // 4)
+            elif prop_adsp_tmp == 2:
+                circle_surface = pygame.Surface((P2_size * 3 // 2, P2_size * 3 // 2))
+                pygame.draw.circle(circle_surface, bg_color[1 - state], (P2_size * 3 // 4, P2_size * 3 // 4), P2_size * 3 // 4)
+                circle_surface.set_alpha(128)
+                circle_surface.set_colorkey((0, 0, 0))
                 screen.blit(circle_surface, (P2.x - P2_size * 3 // 4, P2.y - P2_size * 3 // 4))
-                circle_surface = pygame.Surface((P2_size * 5 // 4, P2_size * 5 // 4), pygame.SRCALPHA)
-                pygame.draw.circle(circle_surface, bg_color[1 - state], (P2_size * 5 // 8, P2_size * 5 // 8), P2_size * 5 // 8)
-                screen.blit(circle_surface, (P2.x - P2_size * 5 // 8, P2.y - P2_size * 5 // 8))
                 P2.max_speed = pr_max_adsp
                 P2.min_speed = pr_min_adsp
         else:
@@ -407,17 +410,18 @@ def game_play(play_state):
 
         if pr_size_time > 0:
             pr_size_time -= 1
-            if prop_touch == 1:
+            if prop_touch_tmp == 1:
                 if state == 0:
-                    P1_size = int(player_size * pr_size)
+                    P1_size = player_size * pr_size
                 else:
-                    P1_size = int(player_size / pr_size)
-            elif prop_touch == 2:
+                    P1_size = player_size // pr_size
+            elif prop_touch_tmp == 2:
                 if state == 1:
-                    P2_size = int(player_size * pr_size)
+                    P2_size = player_size * pr_size
                 else:
-                    P2_size = int(player_size / pr_size)
+                    P2_size = player_size // pr_size
         else:
+            prop_touch_tmp = 0
             P1_size = player_size
             P2_size = player_size
         #--------------------------------
@@ -544,7 +548,6 @@ def game_play(play_state):
                     #pygame.mixer.music.stop()
                     t = 0
                     pygame.mixer.music.load(song[state])
-                    prop_touch = 0
                     prop_effect = -1
                     song_flag = 1
                     pause_times = 0
@@ -553,10 +556,15 @@ def game_play(play_state):
                         pygame.mixer.music.play()
                         state = 1 - state
                         #當隨機出現的道具位置與玩家位置重疊時，重新生成道具位置 直到不重疊
-                        while (abs(P1.x - prop_x) < (P1_size + prop_size) // 2 and abs(P1.y - prop_y) < (P1_size + prop_size) // 2) or (abs(P2.x - prop_x) < (P2_size + prop_size) // 2 and abs(P2.y - prop_y) < (P2_size + prop_size) // 2) or prop_x == 0 or prop_y == 0:
+                        prop_x_tmp = prop_x
+                        prop_y_tmp = prop_y
+                        while (abs(P1.x - prop_x) < (P1_size + prop_size) // 2 and abs(P1.y - prop_y) < (P1_size + prop_size) // 2) or (abs(P2.x - prop_x) < (P2_size + prop_size) // 2 and abs(P2.y - prop_y) < (P2_size + prop_size) // 2) or prop_x == 0 or prop_y == 0 or (prop_x == prop_x_tmp and prop_y == prop_y_tmp):
                             prop_x = random.randint(prop_x_min, prop_x_max) #道具位置 中心
                             prop_y = random.randint(prop_y_min, prop_y_max) #道具位置 中心
-                    else:
+                        prop_img = AnimationBase(prop_x, prop_y, images=imgs_prop, image_size=(prop_size, prop_size))
+                        allGroup.add(prop_img)
+                    prop_touch = 0
+                    if cd == -1:
                         pygame.mixer.music.play(fade_ms=1000)
                         cd -= 1
                         prop_touch = 3
@@ -574,28 +582,34 @@ def game_play(play_state):
                 prop_effect = random.randint(1, effects)
                 print(prop_effect)
                 prop_touch = 1
+                allGroup.empty()
             if abs(P2.x - prop_x) < (P2_size + prop_size) // 2 and abs(P2.y - prop_y) < (P2_size + prop_size) // 2:
                 prop.play()
                 prop_effect = random.randint(1, effects)
                 print(prop_effect)
                 prop_touch = 2
-            pygame.draw.rect(screen, (0, 0, 0), (prop_x - prop_size // 2, prop_y - prop_size // 2, prop_size, prop_size))
+                allGroup.empty()
+            allGroup.update()
+            allGroup.draw(screen)
+        #--------------------------------
 
+        for i in range(2):
+            if adsp_rate[0] <= prop_effect <= adsp_rate[1]:
+                pr_adsp = adsp_time
+                prop_adsp_tmp = prop_touch
+                prop_effect = -1
+            
+            if size_rate[0] <= prop_effect <= size_rate[1]:
+                pr_size_time = size_time
+                prop_touch_tmp = prop_touch
+                prop_effect = -1
 
-        if adsp_rate[0] <= prop_effect <= adsp_rate[1]:
-            pr_adsp = adsp_time
-            prop_effect = -1
-        
-        if size_rate[0] <= prop_effect <= size_rate[1]:
-            pr_size_time = size_time
-            prop_effect = -1
-
-        if hp_rate[0] <= prop_effect <= hp_rate[1]:
-            if prop_touch == 1 and P1.life < max_life:
-                P1.life += 1
-            elif prop_touch == 2 and P2.life < max_life:
-                P2.life += 1
-            prop_effect = -1
+            if hp_rate[0] <= prop_effect <= hp_rate[1]:
+                if prop_touch == 1 and P1.life < max_life:
+                    P1.life += 1
+                elif prop_touch == 2 and P2.life < max_life:
+                    P2.life += 1
+                prop_effect = -1
         #--------------------------------
 
 
@@ -676,7 +690,8 @@ def game_play(play_state):
             P2.y = bg_height + time_y + P2_size / 2
 
 
-
+        
+        pygame.display.flip()
 
         #更新時間
         t += 1
