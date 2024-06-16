@@ -16,7 +16,7 @@ s_color_all = [[(93, 29, 104), (255, 226, 251)],
               [(29, 93, 29), (226, 255, 226)]] #邊界顏色
 
 
-def finish(p1_win, color):
+def finish(p1_win, color ,pve):
     #滑鼠顯示
     pygame.mouse.set_visible(True)
 
@@ -164,10 +164,16 @@ def finish(p1_win, color):
                     run = False
 
         #顯示誰贏了
-        if P1_Win:
-            text = font.render('Battle Finish !! Player 1 Wins!', True, s_color_all[color][bg])
+        if pve:
+            if P1_Win:
+                text = font.render('Battle Finish !! Congratulation!', True, s_color_all[color][bg])
+            else:
+                text = font.render('Battle Finish !! Nice Try ^-^!', True, s_color_all[color][bg])
         else:
-            text = font.render('Battle Finish !! Player 2 Wins!', True, s_color_all[color][bg])
+            if P1_Win:
+                text = font.render('Battle Finish !! Player 1 Wins!', True, s_color_all[color][bg])
+            else:
+                text = font.render('Battle Finish !! Player 2 Wins!', True, s_color_all[color][bg])
         text_rect = text.get_rect()
         text_rect.center = (screen_width // 2, screen_height // 2 - 200)
         screen.blit(text, text_rect)

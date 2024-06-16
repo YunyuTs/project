@@ -68,7 +68,7 @@ size_time = 500 #大小變化時間
 max_life = 8 #最大生命值
 
 #主程式
-def pc_game(play_state):
+def pc_hard(play_state):
 
     #設定變數
     color = play_state[0]
@@ -628,13 +628,13 @@ def pc_game(play_state):
         else:
             flag[0] = 0
         
-        # if key[pygame.K_COMMA]: #",":衝刺
-        #     if flag[1] == 0:
-        #         if P2.sprint_time <= 0:
-        #             P2.setdrift()
-        #         flag[1] = 1
-        # else:
-        #     flag[1] = 0
+        if t % 100 == 0: #",":衝刺
+            if flag[1] == 0:
+                if P2.sprint_time <= 0:
+                    P2.setdrift()
+                flag[1] = 1
+        else:
+            flag[1] = 0
 
         #--------------------------------------------------
 

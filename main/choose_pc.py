@@ -22,7 +22,9 @@ back_color = [(93, 30, 104), (93 - color_diff, 30 - color_diff, 104 - color_diff
 font =  pygame.font.SysFont("microsoftjhengheimicrosoftjhengheiui", 80)
 pvp = [font.render("PvP", True, (93, 30, 104)), font.render("PvP", True, (93 - color_diff, 30 - color_diff, 104 - color_diff))]
 pve = [font.render("PvE", True, (93, 30, 104)), font.render("PvE", True, (93 - color_diff, 30 - color_diff, 104 - color_diff))]
+pve_hard = [font.render("PvE Hard", True, (93, 30, 104)), font.render("PvE Hard", True, (93 - color_diff, 30 - color_diff, 104 - color_diff))]
 distance = 300
+dy = 100
 tweak = 120
 button_width = pvp[0].get_width() + tweak * 2
 button_height = pvp[0].get_height() + 30
@@ -44,6 +46,7 @@ def choose_pc():
 
     m_pvp = 0
     m_pve = 0
+    m_pve_hard = 0
 
     screen.blit(window, (0, 0))
 
@@ -58,24 +61,35 @@ def choose_pc():
         screen.blit(pvp[m_pvp], (screen_width // 2 - pvp[0].get_width() // 2 - distance, screen_height // 2 - pvp[0].get_height() // 2))
 
         #pygame.draw.rect(screen, back_color[m_pve], (screen_width // 2 - pve[0].get_width() // 2 + distance - tweak, screen_height // 2 - pve[0].get_height() // 2 - tweak, pve[0].get_width() + tweak * 2, pve[0].get_height() + tweak * 2))
-        screen.blit(imgs[m_pve], (screen_width // 2 - button_width // 2 + distance, screen_height // 2 - button_height // 2))
-        screen.blit(pve[m_pve], (screen_width // 2 - pve[0].get_width() // 2 + distance, screen_height // 2 - pve[0].get_height() // 2))
+        screen.blit(imgs[m_pve], (screen_width // 2 - button_width // 2 + distance, screen_height // 2 - button_height // 2 - dy))
+        screen.blit(pve[m_pve], (screen_width // 2 - pve[0].get_width() // 2 + distance, screen_height // 2 - pve[0].get_height() // 2 - dy))
+
+        screen.blit(imgs[m_pve_hard], (screen_width // 2 - button_width // 2 + distance, screen_height // 2 - button_height // 2 + dy))
+        screen.blit(pve_hard[m_pve_hard], (screen_width // 2 - pve_hard[0].get_width() // 2 + distance, screen_height // 2 - pve_hard[0].get_height() // 2 + dy))
 
         m_x, m_y = pygame.mouse.get_pos()
 
-        if screen_width // 2 - pvp[0].get_width() // 2 - distance - tweak < m_x < screen_width // 2 - pvp[0].get_width() // 2 - distance + pvp[0].get_width() + tweak and screen_height // 2 - pvp[0].get_height() // 2 - tweak < m_y < screen_height // 2 - pvp[0].get_height() // 2 + pvp[0].get_height() + tweak:
+        if screen_width // 2 - button_width // 2 - distance < m_x < screen_width // 2 - button_width // 2 - distance + button_width and screen_height // 2 - button_height // 2 < m_y < screen_height // 2 - button_height // 2 + button_height:
             m_pvp = 1
             if pygame.mouse.get_pressed()[0]:
                 return "pvp"
         else:
             m_pvp = 0
-        
-        if screen_width // 2 - pve[0].get_width() // 2 + distance - tweak < m_x < screen_width // 2 - pve[0].get_width() // 2 + distance + pve[0].get_width() + tweak and screen_height // 2 - pve[0].get_height() // 2 - tweak < m_y < screen_height // 2 - pve[0].get_height() // 2 + pve[0].get_height() + tweak:
+
+        if screen_width // 2 - button_width // 2 + distance < m_x < screen_width // 2 - button_width // 2 + distance + button_width and screen_height // 2 - button_height // 2 - dy < m_y < screen_height // 2 - button_height // 2 - dy + button_height:
             m_pve = 1
             if pygame.mouse.get_pressed()[0]:
                 return "pve"
         else:
             m_pve = 0
+
+        if screen_width // 2 - button_width // 2 + distance < m_x < screen_width // 2 - button_width // 2 + distance + button_width and screen_height // 2 - button_height // 2 + dy < m_y < screen_height // 2 - button_height // 2 + dy + button_height:
+            m_pve_hard = 1
+            if pygame.mouse.get_pressed()[0]:
+                return "pve_hard"
+        else:
+            m_pve_hard = 0
+
 
 
         for event in pygame.event.get():

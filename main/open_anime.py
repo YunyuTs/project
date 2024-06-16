@@ -85,6 +85,8 @@ def start_page():
         return 1
     elif choice == "pve":
         return 2
+    elif choice == "pve_hard":
+        return 3
 
 
 if __name__ == "__main__":
