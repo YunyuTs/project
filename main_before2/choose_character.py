@@ -118,7 +118,7 @@ direct.set_volume(0.5)
 #------------------------------------------------
 
 
-def choose_color(pvp):
+def choose_color():
     bg_choice = 0 #背景選擇
     choosed = 0 #選擇完成
     bg_width, bg_height = 100, 20 #場地大小
@@ -354,56 +354,30 @@ def choose_color(pvp):
             pygame.draw.rect(screen, side_color[bg_choice][1 - state], (screen_width - bg_width, 0, bg_width, screen_height))
             
             #透視視窗
-            if pvp == 1:
-                if state == 0:
-                    window.set_alpha(150)
-                    screen.blit(window, (0, 0))
-                    text = font.render("Choose your faces", True, bg_color[bg_choice][1])
-                    pygame.draw.rect(screen, bg_color[bg_choice][0], (screen_width // 2 - text.get_width() // 2, time_y * 2, text.get_width(), text.get_height()))
-                    screen.blit(text, (screen_width // 2 - text.get_width() // 2, time_y * 2))
-                    d_text_p1 = direct_font.render("P1 controls", True, bg_color[bg_choice][1])
-                    pygame.draw.rect(screen, bg_color[bg_choice][0], (face_size, face_size * 5 // 2, d_text_p1.get_width(), d_text_p1.get_height()))
-                    screen.blit(d_text_p1, (face_size, face_size * 5 // 2))
-                    d_text_p2 = direct_font.render("P2 controls", True, bg_color[bg_choice][1])
-                    pygame.draw.rect(screen, bg_color[bg_choice][0], (screen_width - face_size - d_text_p2.get_width(), face_size * 5 // 2, d_text_p2.get_width(), d_text_p2.get_height()))
-                    screen.blit(d_text_p2, (screen_width - face_size - d_text_p2.get_width(), face_size * 5 // 2))
-                else:
-                    window.set_alpha(100)
-                    screen.blit(window, (0, 0))
-                    text = font.render("Choose your faces", True, bg_color[bg_choice][0])
-                    pygame.draw.rect(screen, bg_color[bg_choice][1], (screen_width // 2 - text.get_width() // 2, time_y * 2, text.get_width(), text.get_height()))
-                    screen.blit(text, (screen_width // 2 - text.get_width() // 2, time_y * 2))
-                    d_text_p1 = direct_font.render("P1 controls", True, bg_color[bg_choice][0])
-                    pygame.draw.rect(screen, bg_color[bg_choice][1], (face_size, face_size * 5 // 2, d_text_p1.get_width(), d_text_p1.get_height()))
-                    screen.blit(d_text_p1, (face_size, face_size * 5 // 2))
-                    d_text_p2 = direct_font.render("P2 controls", True, bg_color[bg_choice][0])
-                    pygame.draw.rect(screen, bg_color[bg_choice][1], (screen_width - face_size - d_text_p2.get_width(), face_size * 5 // 2, d_text_p2.get_width(), d_text_p2.get_height()))
-                    screen.blit(d_text_p2, (screen_width - face_size - d_text_p2.get_width(), face_size * 5 // 2))
+            if state == 0:
+                window.set_alpha(150)
+                screen.blit(window, (0, 0))
+                text = font.render("Choose your faces", True, bg_color[bg_choice][1])
+                pygame.draw.rect(screen, bg_color[bg_choice][0], (screen_width // 2 - text.get_width() // 2, time_y * 2, text.get_width(), text.get_height()))
+                screen.blit(text, (screen_width // 2 - text.get_width() // 2, time_y * 2))
+                d_text_p1 = direct_font.render("P1 controls", True, bg_color[bg_choice][1])
+                pygame.draw.rect(screen, bg_color[bg_choice][0], (face_size, face_size * 5 // 2, d_text_p1.get_width(), d_text_p1.get_height()))
+                screen.blit(d_text_p1, (face_size, face_size * 5 // 2))
+                d_text_p2 = direct_font.render("P2 controls", True, bg_color[bg_choice][1])
+                pygame.draw.rect(screen, bg_color[bg_choice][0], (screen_width - face_size - d_text_p2.get_width(), face_size * 5 // 2, d_text_p2.get_width(), d_text_p2.get_height()))
+                screen.blit(d_text_p2, (screen_width - face_size - d_text_p2.get_width(), face_size * 5 // 2))
             else:
-                if state == 0:
-                    window.set_alpha(150)
-                    screen.blit(window, (0, 0))
-                    text = font.render("Choose your faces", True, bg_color[bg_choice][1])
-                    pygame.draw.rect(screen, bg_color[bg_choice][0], (screen_width // 2 - text.get_width() // 2, time_y * 2, text.get_width(), text.get_height()))
-                    screen.blit(text, (screen_width // 2 - text.get_width() // 2, time_y * 2))
-                    d_text_p1 = direct_font.render("PvE controls", True, bg_color[bg_choice][1])
-                    pygame.draw.rect(screen, bg_color[bg_choice][0], (face_size, face_size * 5 // 2, d_text_p1.get_width(), d_text_p1.get_height()))
-                    screen.blit(d_text_p1, (face_size, face_size * 5 // 2))
-                    d_text_p2 = direct_font.render("Face of NPC", True, bg_color[bg_choice][1])
-                    pygame.draw.rect(screen, bg_color[bg_choice][0], (screen_width - face_size - d_text_p2.get_width(), face_size * 5 // 2, d_text_p2.get_width(), d_text_p2.get_height()))
-                    screen.blit(d_text_p2, (screen_width - face_size - d_text_p2.get_width(), face_size * 5 // 2))
-                else:
-                    window.set_alpha(100)
-                    screen.blit(window, (0, 0))
-                    text = font.render("Choose your faces", True, bg_color[bg_choice][0])
-                    pygame.draw.rect(screen, bg_color[bg_choice][1], (screen_width // 2 - text.get_width() // 2, time_y * 2, text.get_width(), text.get_height()))
-                    screen.blit(text, (screen_width // 2 - text.get_width() // 2, time_y * 2))
-                    d_text_p1 = direct_font.render("PvE controls", True, bg_color[bg_choice][0])
-                    pygame.draw.rect(screen, bg_color[bg_choice][1], (face_size, face_size * 5 // 2, d_text_p1.get_width(), d_text_p1.get_height()))
-                    screen.blit(d_text_p1, (face_size, face_size * 5 // 2))
-                    d_text_p2 = direct_font.render("Face of NPC", True, bg_color[bg_choice][0])
-                    pygame.draw.rect(screen, bg_color[bg_choice][1], (screen_width - face_size - d_text_p2.get_width(), face_size * 5 // 2, d_text_p2.get_width(), d_text_p2.get_height()))
-                    screen.blit(d_text_p2, (screen_width - face_size - d_text_p2.get_width(), face_size * 5 // 2))
+                window.set_alpha(100)
+                screen.blit(window, (0, 0))
+                text = font.render("Choose your faces", True, bg_color[bg_choice][0])
+                pygame.draw.rect(screen, bg_color[bg_choice][1], (screen_width // 2 - text.get_width() // 2, time_y * 2, text.get_width(), text.get_height()))
+                screen.blit(text, (screen_width // 2 - text.get_width() // 2, time_y * 2))
+                d_text_p1 = direct_font.render("P1 controls", True, bg_color[bg_choice][0])
+                pygame.draw.rect(screen, bg_color[bg_choice][1], (face_size, face_size * 5 // 2, d_text_p1.get_width(), d_text_p1.get_height()))
+                screen.blit(d_text_p1, (face_size, face_size * 5 // 2))
+                d_text_p2 = direct_font.render("P2 controls", True, bg_color[bg_choice][0])
+                pygame.draw.rect(screen, bg_color[bg_choice][1], (screen_width - face_size - d_text_p2.get_width(), face_size * 5 // 2, d_text_p2.get_width(), d_text_p2.get_height()))
+                screen.blit(d_text_p2, (screen_width - face_size - d_text_p2.get_width(), face_size * 5 // 2))
 
                 
             #字體
@@ -533,5 +507,5 @@ def choose_color(pvp):
 
 
 if __name__ == "__main__":
-    print(choose_color(2))
+    print(choose_color())
     #choose_face()

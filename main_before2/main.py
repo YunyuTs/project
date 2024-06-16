@@ -1,8 +1,11 @@
 import pygame
 from game import game_play
+from pc import pc_game
+from pc_hard import pc_hard
 from choose_character import choose_color
 from finish import finish
 from open_anime import start_page
+from face_pve import face_pve
 
 #設定標題
 pygame.display.set_caption("Tag you're it!")
@@ -18,7 +21,10 @@ def main():
             start = start_page()
             if start == 0:
                 break
-            choice = choose_color(start)
+            if start == 1:
+                choice = choose_color()
+            else:
+                choice = face_pve()
             repeat = 1
             continue
         elif repeat > 2:
@@ -40,7 +46,12 @@ def main():
             break
 
         while repeat == 1:
-            repeat = game_play(choice, start)
+            if start == 1:
+                repeat = game_play(choice)
+            elif start == 2:
+                repeat = pc_game(choice)
+            elif start == 3:
+                repeat = pc_hard(choice)
         
 
 

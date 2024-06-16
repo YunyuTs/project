@@ -68,7 +68,7 @@ size_time = 500 #大小變化時間
 max_life = 8 #最大生命值
 
 #主程式
-def game_play(play_state, start):
+def game_play(play_state):
 
     #設定變數
     color = play_state[0]
@@ -628,23 +628,13 @@ def game_play(play_state, start):
         else:
             flag[0] = 0
         
-        if start == 1:
-            if key[pygame.K_COMMA]: #",":衝刺
-                if flag[1] == 0:
-                    if P2.sprint_time <= 0:
-                        P2.setdrift()
-                    flag[1] = 1
-            else:
-                flag[1] = 0
-        elif start == 3:
-            if t % 100 == 0: #",":衝刺
-                if flag[1] == 0:
-                    if P2.sprint_time <= 0:
-                        P2.setdrift()
-                    flag[1] = 1
-            else:
-                flag[1] = 0
-
+        if key[pygame.K_COMMA]: #",":衝刺
+            if flag[1] == 0:
+                if P2.sprint_time <= 0:
+                    P2.setdrift()
+                flag[1] = 1
+        else:
+            flag[1] = 0
 
         #--------------------------------------------------
 
@@ -682,10 +672,7 @@ def game_play(play_state, start):
 
         #玩家移動
         P1.turn_move(key, pygame.K_a, pygame.K_w, pygame.K_s, pygame.K_d)
-        if start == 1:
-            P2.turn_move(key, pygame.K_LEFT, pygame.K_UP, pygame.K_DOWN, pygame.K_RIGHT)
-        else:
-            P2.PC_move(P1.x, P1.y, (bg_width, screen_width - bg_width), (bg_height + time_y, screen_height - bg_height), P1_size, P2_size)
+        P2.turn_move(key, pygame.K_LEFT, pygame.K_UP, pygame.K_DOWN, pygame.K_RIGHT)
         #P1碰撞邊界
         if P1.x - P1_size / 2 < bg_width:
             P1.x = screen_width - bg_width - P1_size / 2
