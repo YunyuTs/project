@@ -425,7 +425,9 @@ def game_play(play_state):
             P1_size = player_size
             P2_size = player_size
         #--------------------------------
-
+        
+        #繪製道具
+        allGroup.draw(screen)
 
         #繪製玩家
         if state == 0:
@@ -590,7 +592,6 @@ def game_play(play_state):
                 prop_touch = 2
                 allGroup.empty()
             allGroup.update()
-            allGroup.draw(screen)
         #--------------------------------
 
         for i in range(2):
