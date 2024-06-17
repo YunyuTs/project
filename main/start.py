@@ -113,7 +113,7 @@ tweak = 120
 button_width = pvp[0].get_width() + tweak * 2
 button_height = pvp[0].get_height() + 30
 
-img = pygame.image.load("src/images/space.png")
+img = pygame.image.load("src/images/Space.png")
 img = pygame.transform.scale(img, (button_width, button_height))
 img.set_colorkey((0, 0, 0))
 img_cv = cv2.imread("src/images/space.png")
