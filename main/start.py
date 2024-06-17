@@ -116,7 +116,7 @@ button_height = pvp[0].get_height() + 30
 img = pygame.image.load("src/images/Space.png")
 img = pygame.transform.scale(img, (button_width, button_height))
 img.set_colorkey((0, 0, 0))
-img_cv = cv2.imread("src/images/space.png")
+img_cv = cv2.imread("src/images/Space.png")
 b, g, r = cv2.split(img_cv)
 img_cv = cv2.merge([b - color_diff, g - color_diff, r - color_diff])
 img_cv = pygame.surfarray.make_surface(cv2.rotate(img_cv, cv2.ROTATE_90_CLOCKWISE))
