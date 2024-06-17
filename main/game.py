@@ -468,15 +468,26 @@ def game_play(play_state, start):
 
 
         #------繪製名字-------
-        p1_text = font.render("P1", True, bg_color[1 - state])
-        p2_text = font.render("P2", True, bg_color[1 - state])
-        if state == 0:
-            screen.blit(p2_text, (P2.x - (player_size // 5), P2.y - P2_size // 2 - text_distance))
-            #screen.blit(p1_text, (P1.x - (P1_size / 5), P1.y - P1_size))
-            screen.blit(p1_text, (P1.x - (player_size // 5), P1.y - P1_size // 2 - text_distance))
+        if start == 1:
+            p1_text = font.render("P1", True, bg_color[1 - state])
+            p2_text = font.render("P2", True, bg_color[1 - state])
+            if state == 0:
+                screen.blit(p2_text, (P2.x - (player_size // 5), P2.y - P2_size // 2 - text_distance))
+                #screen.blit(p1_text, (P1.x - (P1_size / 5), P1.y - P1_size))
+                screen.blit(p1_text, (P1.x - (player_size // 5), P1.y - P1_size // 2 - text_distance))
+            else:
+                screen.blit(p1_text, (P1.x - (player_size // 5), P1.y - P1_size // 2 - text_distance))
+                screen.blit(p2_text, (P2.x - (player_size // 5), P2.y - P2_size // 2 - text_distance))
         else:
-            screen.blit(p1_text, (P1.x - (player_size // 5), P1.y - P1_size // 2 - text_distance))
-            screen.blit(p2_text, (P2.x - (player_size // 5), P2.y - P2_size // 2 - text_distance))
+            p1_text = font.render("YOU", True, bg_color[1 - state])
+            p2_text = font.render("NPC", True, bg_color[1 - state])
+            if state == 0:
+                screen.blit(p2_text, (P2.x - (player_size // 2), P2.y - P2_size // 2 - text_distance))
+                #screen.blit(p1_text, (P1.x - (P1_size / 5), P1.y - P1_size))
+                screen.blit(p1_text, (P1.x - (player_size // 2), P1.y - P1_size // 2 - text_distance))
+            else:
+                screen.blit(p1_text, (P1.x - (player_size // 2), P1.y - P1_size // 2 - text_distance))
+                screen.blit(p2_text, (P2.x - (player_size // 2), P2.y - P2_size // 2 - text_distance))
         #--------------------------------
 
         #------繪製時間軸-------
@@ -723,7 +734,7 @@ if __name__ == '__main__':
     repeat = 1
     while repeat:
         repeat = 0
-        repeat = game_play((0, 0, 3))
+        repeat = game_play((0, 0, 3), 1)
         if repeat == 3:
             print("P1 win")
         elif repeat == 4:
