@@ -1,7 +1,7 @@
 import pygame
 import time
 from start import start_loop, screen, screen_width, screen_height
-import random
+
 
 # Load the logo images
 logo1_image = pygame.image.load("src/images/yuyu.png")
