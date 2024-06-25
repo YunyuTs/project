@@ -1,7 +1,6 @@
 import pygame
 import cv2
 import numpy as np
-import sys    
 #初始化
 pygame.init()
 
